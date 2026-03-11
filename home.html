@@ -1,2 +1,49 @@
-                 <h1>Portfolio</h1>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum aliquid corporis architecto corrupti perspiciatis nam asperiores repellendus molestiae et! Nesciunt eaque voluptate ullam adipisci magnam illum nulla ratione distinctio eius!</p>
+<link rel="stylesheet" href="assets/css/styles.css" />
+
+<div class="page-wrapper">
+    <div class="mytitle" data-text="MARIO DAK">
+        <h1>Mario Dak</h1>
+    </div>
+
+    <div class="portfolio-frame">
+        <div class="inner-mask"></div> 
+        <div class="content-inside">
+            <header>
+                <nav>
+                    <a href="#" onclick="window.navigate('home.html'); return false;">Home</a>
+                    <a href="#" onclick="window.navigate('artstyle.html'); return false;">Art Style</a>
+                    <a href="#" onclick="navigate('projects.html'); return false;">Projects</a>
+                    <a href="#" onclick="navigate('gallery.html'); return false;">Gallery</a>
+                    <a href="#" onclick="navigate('contact.html'); return false;">Contact</a>
+                </nav>
+            </header>
+
+            <section id="main-section">
+                </section>
+        </div>
+    </div>
+</div>
+
+<footer>@ Copyright Mario Dak 2026</footer>
+
+<script>
+    window.navigate = function(file) {
+        const area = document.getElementById('main-section');
+        if (!area) return;
+
+        area.style.opacity = '0.3'; 
+        fetch(file)
+            .then(response => response.text())
+            .then(html => {
+                area.innerHTML = html;
+                area.style.opacity = '1';
+                // Ak tvoj web potrebuje re-inicializovať nejaké efekty po načítaní, daj to sem
+            })
+            .catch(err => {
+                area.innerHTML = "<h1>ERROR: DATA NOT FOUND</h1>";
+            });
+    };
+</script>
+
+<script src="assets/scripts/main.js"></script>
+<script src="assets/scripts/vanilla.js"></script>

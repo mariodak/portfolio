@@ -1,123 +1,163 @@
 <!doctype html>
-<html lang="en">
+<html lang="sk">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Mario Dak - Portfolio</title>
-
+    <title>Mario Dak | System Loading</title>
     <style>
-        #preloader {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000; /* Musí byť nad všetkým */
-            opacity: 1;
-            transition: opacity 0.5s ease;
+        /* Úvodné nastavenie - skrolovanie je zakázané počas loadingu */
+        body, html { 
+            background: #000; 
+            margin: 0; 
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Toto držíme zamknuté kým beží loader */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-family: 'Courier New', Courier, monospace; 
+            color: #ffff00;
         }
+
+        #loader-interface { 
+            width: 300px; 
+            text-align: center; 
+            z-index: 9999;
+        }
+
         .loader-square {
-            width: 25px;
-            height: 25px;
-            background: #ffff00;
-            box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
-            animation: spin 1s linear infinite;
+            width: 30px; height: 30px; background: #ffff00;
+            margin: 0 auto 20px; box-shadow: 0 0 20px #ffff00;
+            animation: spin 1s infinite steps(8);
         }
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        #progress-container {
+            width: 100%; height: 4px; background: #222; margin: 15px 0;
+            position: relative; overflow: hidden; border: 1px solid #444;
         }
-        .loader-hidden {
-            opacity: 0 !important;
-            pointer-events: none;
+
+        #progress-bar {
+            width: 0%; height: 100%; background: #ffff00;
+            box-shadow: 0 0 10px #ffff00; transition: width 0.1s linear;
         }
+
+        #stats { font-size: 12px; letter-spacing: 1px; display: flex; justify-content: space-between; }
+
+        /* Tento obal drží tvoj web po načítaní */
+        #app-wrapper { 
+            opacity: 0; 
+            transition: opacity 0.8s; 
+            width: 100%; 
+            height: auto; 
+            min-height: 100vh;
+            display: none; /* Skrytý kým sa sťahuje */
+        }
+
+        .hidden { display: none !important; }
     </style>
-
-    
-    
-    <script src="/assets/scripts/main.js" defer></script>
-    <script src="/assets/scripts/vanilla.js" defer></script>
 </head>
-
 <body>
-    <div id="preloader">
+
+    <div id="loader-interface">
         <div class="loader-square"></div>
-    </div>
-
-    <div class="page-wrapper">
-        <div class="mytitle" data-text="MARIO DAK">
-            <h1>Mario Dak</h1>
-        </div>
-
-        <div class="portfolio-frame">
-            <div class="inner-mask"></div> 
-            <div class="content-inside">
-                <header>
-                    <nav>
-                        <a href="#" onclick="navigate('home.html'); return false;">Home</a>
-                        <a href="#" onclick="navigate('artstyle.html'); return false;">Art Style</a>
-                        <a href="#" onclick="navigate('projects.html'); return false;">Projects</a>
-                        <a href="#" onclick="navigate('gallery.html'); return false;">Gallery</a>
-                        <a href="#" onclick="navigate('contact.html'); return false;">Contact</a>
-                    </nav>
-                </header>
-
-                <section id="main-section">
-                    <div style="color: #ffff00; text-align: center; padding-top: 50px; font-family: monospace;">
-                        INITIALIZING SYSTEM...
-                    </div>
-                </section>
-            </div>
+        <div style="font-size: 14px; font-weight: bold;">DOWNLOADING_CORE...</div>
+        <div id="progress-container"><div id="progress-bar"></div></div>
+        <div id="stats">
+            <span id="kb-counter">0 KB</span>
+            <span id="percent-counter">0%</span>
         </div>
     </div>
 
-    <footer>
-        @ Copyright Mario Dak 2026
-    </footer>
+    <div id="app-wrapper"></div>
 
     <script>
-        const preloader = document.getElementById('preloader');
-        const mainSection = document.getElementById('main-section');
+        const progressBar = document.getElementById('progress-bar');
+        const kbCounter = document.getElementById('kb-counter');
+        const percentCounter = document.getElementById('percent-counter');
+        const loaderInterface = document.getElementById('loader-interface');
+        const appWrapper = document.getElementById('app-wrapper');
 
-        // Funkcia na načítanie podstránok
-        function navigate(file) {
-            mainSection.style.opacity = '0.4'; 
-            
-            fetch(file)
-                .then(response => {
-                    if (!response.ok) throw new Error('Not found');
-                    return response.text();
-                })
-                .then(html => {
-                    mainSection.innerHTML = html;
-                    mainSection.style.opacity = '1';
-                })
-                .catch(err => {
-                    mainSection.innerHTML = "<h2 style='color:#f00; text-align:center;'>ERROR: DATA_CORRUPTED</h2>";
-                    console.error(err);
-                });
-        }
-
-        // Štartovacia sekvencia
-        function bootUp() {
-            // Okamžite začneme ťahať domovskú stránku
-            navigate('home.html');
-
-            // Safari fix: Aj keď je všetko načítané, loader podržíme aspoň 1.5 sekundy
-            // aby mal používateľ vizuálny vnem "načítavania" systému.
-            setTimeout(() => {
-                preloader.classList.add('loader-hidden');
+        async function launchSystem() {
+            try {
+                const response = await fetch('home.html');
+                const reader = response.body.getReader();
                 
-                // Po zmiznutí ho úplne vyhodíme z DOMu, aby nezavadzal
+                // Odhad veľkosti (500KB), ak server neposiela presnú dĺžku
+                const contentLength = +response.headers.get('Content-Length') || 500000; 
+                
+                let receivedLength = 0;
+                let chunks = [];
+
+                while(true) {
+                    const {done, value} = await reader.read();
+                    if (done) break;
+                    chunks.push(value);
+                    receivedLength += value.length;
+
+                    let percent = Math.min(Math.round((receivedLength / contentLength) * 100), 100);
+                    progressBar.style.width = percent + '%';
+                    percentCounter.innerText = percent + '%';
+                    kbCounter.innerText = (receivedLength / 1024).toFixed(0) + " / " + (contentLength / 1024).toFixed(0) + " KB";
+                }
+
+                let chunksAll = new Uint8Array(receivedLength);
+                let position = 0;
+                for(let chunk of chunks) {
+                    chunksAll.set(chunk, position);
+                    position += chunk.length;
+                }
+                const resultHTML = new TextDecoder("utf-8").decode(chunksAll);
+
+                // FINALIZÁCIA A ODOMKNUTIE WEBU
                 setTimeout(() => {
-                    preloader.style.display = 'none';
-                }, 500);
-            }, 1500); 
+                    // 1. Zobrazíme wrapper a vložíme HTML
+                    appWrapper.style.display = 'block';
+                    appWrapper.innerHTML = resultHTML;
+                    
+                    // 2. Skryjeme loader
+                    loaderInterface.classList.add('hidden');
+                    
+                    // 3. ODSTRÁNENIE BLOKOVANIA SKROLOVANIA
+                    document.body.style.overflow = 'auto';
+                    document.body.style.height = 'auto';
+                    document.body.style.display = 'block'; // Zmeníme z flexu na block kvôli skrolovaniu
+                    document.documentElement.style.overflow = 'auto';
+                    
+                    // Plynulý nábeh webu
+                    setTimeout(() => { appWrapper.style.opacity = '1'; }, 50);
+                    
+                    // 4. Oživíme skripty z app.html
+                    const scripts = appWrapper.querySelectorAll('script');
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement("script");
+                        if (oldScript.src) {
+                            newScript.src = oldScript.src;
+                        } else {
+                            newScript.textContent = oldScript.textContent;
+                        }
+                        document.body.appendChild(newScript);
+                        oldScript.remove();
+                    });
+
+                    // 5. Spustíme úvodnú stránku
+                    setTimeout(() => {
+                        if (typeof window.navigate === "function") {
+                            window.navigate('home.html');
+                        }
+                    }, 150);
+
+                }, 800);
+
+            } catch (err) {
+                console.error(err);
+                kbCounter.innerText = "CRITICAL_BOOT_ERROR";
+            }
         }
 
-        // Spustíme hneď, ako je tento skript prečítaný
-        bootUp();
+        window.addEventListener('load', launchSystem);
     </script>
 </body>
 </html>
