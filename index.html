@@ -92,5 +92,41 @@
             }, 300); 
         });
     </script>
+    <script>
+      // 1. Loader spustíme okamžite pri načítaní tohto skriptu
+const preloader = document.getElementById('preloader');
+
+// 2. Funkcia na navigáciu (tú už máš, len ju uisti, že je dostupná)
+function navigate(file) {
+    const area = document.getElementById('main-section');
+    fetch(file)
+        .then(response => response.text())
+        .then(html => {
+            area.innerHTML = html;
+            // Tu môžeš pridať ďalšiu logiku po načítaní
+        });
+}
+
+// 3. TENTO TRIK ODRUBE SAFARI:
+// Namiesto čakania na 'load' (ktorý trvá večnosť alebo nulu), 
+// nastavíme fixný čas, aby mal používateľ zážitok z "bootovania" systému.
+
+function startSystem() {
+    // Spustíme fetch domovskej stránky na pozadí
+    navigate('home.html');
+
+    // Umelo podržíme loader 1.5 sekundy (Cyberpunk boot-up time)
+    setTimeout(() => {
+        preloader.classList.add('loader-hidden');
+        
+        setTimeout(() => {
+            preloader.style.display = 'none';
+        }, 500); // čas na fade-out
+    }, 1500); 
+}
+
+// Spustíme celú parádu
+startSystem();
+    </script>
 </body>
 </html>
