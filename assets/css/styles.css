@@ -32,12 +32,26 @@
   }
 }
 body {
-  background-color: #121212;
   color: #fff;
   margin: 0 0 30px 0;
   text-align: center;
   font-family: Zilla-Regular;
   overflow-x: hidden;
+  background-color: #121212;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(/assets/img/background-img.jpg);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.03;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .mytitle {
@@ -93,10 +107,10 @@ body {
 .portfolio-frame .inner-mask {
   position: absolute;
   z-index: 1;
-  top: 0.6px;
-  left: 0.4px;
-  right: 0.4px;
-  bottom: 0.4px;
+  top: 1px;
+  left: 0.6px;
+  right: 0.6px;
+  bottom: 0.7px;
   background: #121212;
   clip-path: polygon(0% 5%, 5% 0%, 45% 0%, 48% 2%, 52% 2%, 55% 0%, 95% 0%, 100% 5%, 100% 45%, 100% 50%, 100% 55%, 100% 95%, 95% 100%, 55% 100%, 52% 98%, 48% 98%, 45% 100%, 5% 100%, 0% 95%, 0% 55%, 0% 50%, 0% 45%);
   pointer-events: none;
@@ -140,12 +154,11 @@ a {
   overflow: hidden;
 }
 a:hover {
-  background-color: #ffffff;
-  color: #121212;
+  color: transparent !important;
   filter: brightness(1.2) contrast(1.1);
   transition: filter 0.2s ease-in-out, background-color 0.6s;
 }
-a:hover::before {
+a:hover::before, a:hover::after {
   content: attr(data-text);
   position: absolute;
   top: 0;
@@ -157,25 +170,15 @@ a:hover::before {
   justify-content: center;
   background: #ffffff;
   color: #121212;
-  clip-path: inset(0 0 50% 0);
-  animation: glitch-slice 0.4s infinite;
-  z-index: 1;
+  font-size: 1.2em;
+}
+a:hover::before {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 45%, 85% 50%, 100% 55%, 0% 55%);
+  animation: glitch-slice 0.3s infinite;
 }
 a:hover::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffffff;
-  color: #121212;
-  clip-path: inset(50% 0 0 0);
-  animation: glitch-slice 0.4s infinite reverse;
-  z-index: 1;
+  clip-path: polygon(0% 55%, 100% 55%, 100% 100%, 0% 100%, 0% 55%, 15% 50%, 0% 45%);
+  animation: glitch-slice 0.3s infinite reverse;
 }
 
 @keyframes glitch-slice {
