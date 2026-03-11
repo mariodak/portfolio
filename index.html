@@ -1,5 +1,32 @@
 <!doctype html>
 <html lang="en">
+<script src="/assets/scripts/main.js"></script>
+    <script>
+  function navigate(file) {
+    const area = document.getElementById('main-section');
+    
+    // Voliteľné: Tu môžeš pridať glitch animáciu pred načítaním
+    area.style.opacity = '0.5'; 
+
+    fetch(file)
+      .then(response => {
+        if (!response.ok) throw new Error('Network error');
+        return response.text();
+      })
+      .then(html => {
+        area.innerHTML = html;
+        area.style.opacity = '1';
+        // Ak máš v sekcii galériu, JS ju tu môže zinicializovať
+      })
+      .catch(err => {
+        area.innerHTML = "<h1>ERROR 404: CONNECTION LOST</h1>";
+      });
+  }
+
+  // Načítanie domovskej stránky pri prvom vstupe
+  window.onload = () => navigate('home.html');
+</script>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,6 +35,10 @@
 </head>
 <body>
     
+    <div id="preloader">
+  <div class="loader-square"></div>
+    </div>
+
 
 <div class="page-wrapper">
 
@@ -25,11 +56,11 @@
 
 
                 <nav>
-                    <a href="#" data-text="Home">Home</a>
-                    <a href="#" data-text="Art Style">Art Style</a>
-                    <a href="#" data-text="Projects">Projects</a>
-                    <a href="#" data-text="Gallery">Gallery</a>
-                    <a href="#" data-text="Contact">Contact</a>
+                    <a href="#" data-text="Home" onclick="navigate('home.html'); return false;">Home</a>
+                    <a href="#" data-text="Art Style" onclick="navigate('artstyle.html'); return false;">Art Style</a>
+                    <a href="#" data-text="Projects" onclick="navigate('projects.html'); return false;">Projects</a>
+                    <a href="#" data-text="Gallery" onclick="navigate('gallery.html'); return false;">Gallery</a>
+                    <a href="#" data-text="Contact" onclick="navigate('contact.html'); return false;">Contact</a>
                     
 
 
@@ -37,10 +68,7 @@
 
 
             </header>
-            <section>
-
-                 <h1>Portfolio</h1>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum aliquid corporis architecto corrupti perspiciatis nam asperiores repellendus molestiae et! Nesciunt eaque voluptate ullam adipisci magnam illum nulla ratione distinctio eius!</p>
+            <section id="main-section">
 
             </section>
         </div>
