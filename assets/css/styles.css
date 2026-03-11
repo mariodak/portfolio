@@ -1,10 +1,56 @@
+@charset "UTF-8";
+@font-face {
+  font-family: Hacked;
+  src: url(/assets/font/Hacked-KerX.ttf);
+}
+@font-face {
+  font-family: Zilla-Regular;
+  src: url(/assets/font/ZillaSlab-Regular.ttf);
+}
+@font-face {
+  font-family: Zilla-Bold;
+  src: url(/assets/font/ZillaSlab-Bold.ttf);
+}
+@font-face {
+  font-family: Zilla-Bold-Italic;
+  src: url(/assets/font/ZillaSlab-BoldItalic.ttf);
+}
+@font-face {
+  font-family: Zilla-Regular-Highlight;
+  src: url(/assets/font/ZillaSlabHighlight-Regular.ttf);
+}
+@font-face {
+  font-family: Zilla-Bold-Highlight;
+  src: url(/assets/font/ZillaSlabHighlight-Bold.ttf);
+}
+@keyframes rotateSnake {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 body {
   background-color: #121212;
   color: #fff;
-  margin: 0;
+  margin: 0 0 30px 0;
   text-align: center;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Zilla-Regular;
   overflow-x: hidden;
+}
+
+.mytitle {
+  font-family: Hacked;
+  font-size: 4rem;
+  color: rgb(246, 255, 0);
+  text-shadow: 20px 20px rgba(255, 247, 0, 0.031);
+  position: relative;
+  display: flex;
+  white-space: nowrap;
+  line-height: 1;
+  align-items: center;
+  justify-content: center;
 }
 
 .page-wrapper {
@@ -14,19 +60,23 @@ body {
 }
 
 .portfolio-frame {
-  background: #1a1a1a;
-  border-radius: 10px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
   width: 80%;
+  padding: 10px;
   min-height: 400px;
   height: auto;
-  margin: 30vh auto 0;
-  box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.8);
-  padding: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin: 5vh auto 200px;
+  -webkit-mask-image: linear-gradient(45deg, transparent 15px, #121212 15px), linear-gradient(135deg, transparent 15px, #121212 15px), linear-gradient(225deg, transparent 15px, #121212 15px), linear-gradient(315deg, transparent 15px, #121212 15px);
+  -webkit-mask-position: bottom left, top left, top right, bottom right;
+  -webkit-mask-size: 51% 51%;
+  -webkit-mask-repeat: no-repeat;
+  mask-image: linear-gradient(45deg, transparent 15px, #121212 15px), linear-gradient(135deg, transparent 15px, #121212 15px), linear-gradient(225deg, transparent 15px, #121212 15px), linear-gradient(315deg, transparent 15px, #121212 15px);
+  mask-position: bottom left, top left, top right, bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
 }
 .portfolio-frame::before, .portfolio-frame::after {
   content: "";
@@ -37,34 +87,121 @@ body {
   width: 200%;
   height: 400%;
   background-repeat: no-repeat;
-  background-image: conic-gradient(transparent, rgba(82, 209, 255, 0.2) 10%, #52d1ff 40%, transparent 45%);
+  background-image: conic-gradient(transparent, rgba(246, 255, 0, 0.2) 10%, rgb(246, 255, 0) 40%, transparent 45%);
   animation: rotateSnake 8s linear infinite;
-}
-.portfolio-frame::after {
-  animation-delay: -4s;
 }
 .portfolio-frame .inner-mask {
   position: absolute;
   z-index: 1;
-  top: 2px;
-  left: 2px;
-  right: 2px;
-  bottom: 2px;
-  background: #1a1a1a;
-  border-radius: 8px;
+  top: 0.6px;
+  left: 0.4px;
+  right: 0.4px;
+  bottom: 0.4px;
+  background: #121212;
+  clip-path: polygon(0% 5%, 5% 0%, 45% 0%, 48% 2%, 52% 2%, 55% 0%, 95% 0%, 100% 5%, 100% 45%, 100% 50%, 100% 55%, 100% 95%, 95% 100%, 55% 100%, 52% 98%, 48% 98%, 45% 100%, 5% 100%, 0% 95%, 0% 55%, 0% 50%, 0% 45%);
   pointer-events: none;
 }
 .portfolio-frame .content-inside {
   position: relative;
   z-index: 2;
+  min-height: 400px;
   color: white;
+  background-color: transparent;
+  clip-path: polygon(0% 5%, 5% 0%, 45% 0%, 48% 2%, 52% 2%, 55% 0%, 95% 0%, 100% 5%, 100% 45%, 98% 50%, 100% 55%, 100% 95%, 95% 100%, 55% 100%, 52% 98%, 48% 98%, 45% 100%, 5% 100%, 0% 95%, 0% 55%, 2% 50%, 0% 45%);
+  border: none;
+  outline: 0.6px solid rgba(246, 255, 0, 0.5);
+  outline-offset: -2px;
+}
+.portfolio-frame nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch; /* TOTO JE KĽÚČ: Natiahne deti na celú výšku */
+  width: 100%;
+  height: 60px; /* Nastav si fixnú výšku, ktorú potrebuješ */
+  background-color: rgb(246, 255, 0);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 70%, 98% 100%, 70% 100%, 68% 90%, 32% 90%, 30% 100%, 2% 100%, 0% 70%);
+  padding: 0; /* Zmaž padding, aby sa linky dotýkali okrajov */
+  overflow: hidden;
 }
 
-@keyframes rotateSnake {
+a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+  text-decoration: none;
+  color: #121212;
+  font-weight: bold;
+  transition: 0.3s;
+  font-size: 1.2em;
+  letter-spacing: 5px;
+  position: relative;
+  overflow: hidden;
+}
+a:hover {
+  background-color: #ffffff;
+  color: #121212;
+  filter: brightness(1.2) contrast(1.1);
+  transition: filter 0.2s ease-in-out, background-color 0.6s;
+}
+a:hover::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #121212;
+  clip-path: inset(0 0 50% 0);
+  animation: glitch-slice 0.4s infinite;
+  z-index: 1;
+}
+a:hover::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #121212;
+  clip-path: inset(50% 0 0 0);
+  animation: glitch-slice 0.4s infinite reverse;
+  z-index: 1;
+}
+
+@keyframes glitch-slice {
   0% {
-    transform: rotate(0deg);
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(4px);
+  }
+  50% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(2px);
   }
   100% {
-    transform: rotate(360deg);
+    transform: translateX(0);
   }
+}
+section {
+  font-family: Zilla-Regular;
+}
+
+footer {
+  font-family: Zilla-Regular;
+  color: rgba(246, 255, 0, 0.4);
+  text-transform: uppercase;
+  font-size: 0.8em;
 }/*# sourceMappingURL=styles.css.map */
