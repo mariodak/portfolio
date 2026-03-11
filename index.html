@@ -1,119 +1,96 @@
 <!doctype html>
 <html lang="en">
-
-<style>
-    /* Toto sa načíta okamžite bez sťahovania súboru */
-    #preloader {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    .loader-square {
-      width: 25px; height: 25px;
-      background: #ffff00;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-    .loader-hidden { opacity: 0; pointer-events: none; transition: 0.5s; }
-</style>
-
-<script src="/assets/scripts/main.js" defer></script>
-    <script>
-  function navigate(file) {
-    const area = document.getElementById('main-section');
-    
-    // Voliteľné: Tu môžeš pridať glitch animáciu pred načítaním
-    area.style.opacity = '0.5'; 
-
-    fetch(file)
-      .then(response => {
-        if (!response.ok) throw new Error('Network error');
-        return response.text();
-      })
-      .then(html => {
-        area.innerHTML = html;
-        area.style.opacity = '1';
-        // Ak máš v sekcii galériu, JS ju tu môže zinicializovať
-      })
-      .catch(err => {
-        area.innerHTML = "<h1>ERROR 404: CONNECTION LOST</h1>";
-      });
-  }
-
-  // Načítanie domovskej stránky pri prvom vstupe
-  window.onload = () => navigate('home.html');
-</script>
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Mario Dak - Portfolio</title>
+
+    <style>
+        #preloader {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #000;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999;
+        }
+        .loader-square {
+            width: 25px; height: 25px;
+            background: #ffff00;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .loader-hidden { opacity: 0; pointer-events: none; transition: 0.5s; }
+    </style>
+
     <link rel="stylesheet" href="assets/css/styles.css" />
-</head>
-<body>
     
+    <script src="/assets/scripts/main.js" defer></script>
+    <script src="/assets/scripts/vanilla.js" defer></script>
+</head>
+
+<body>
     <div id="preloader">
-  <div class="loader-square"></div>
+        <div class="loader-square"></div>
     </div>
 
+    <div class="page-wrapper">
+        <div class="mytitle" data-text="MARIO DAK">
+            <h1>Mario Dak</h1>
+        </div>
 
-<div class="page-wrapper">
+        <div class="portfolio-frame">
+            <div class="inner-mask"></div> 
+            <div class="content-inside">
+                <header>
+                    <nav>
+                        <a href="#" onclick="navigate('home.html'); return false;">Home</a>
+                        <a href="#" onclick="navigate('artstyle.html'); return false;">Art Style</a>
+                        <a href="#" onclick="navigate('projects.html'); return false;">Projects</a>
+                        <a href="#" onclick="navigate('gallery.html'); return false;">Gallery</a>
+                        <a href="#" onclick="navigate('contact.html'); return false;">Contact</a>
+                    </nav>
+                </header>
 
-    <div class="mytitle" data-text="MARIO DAK">
-        <h1>Mario Dak</h1>
-    </div>
-
-
-    <div class="portfolio-frame">
-        <div class="inner-mask"></div> 
-        
-        <div class="content-inside">
-            
-            <header>
-
-
-                <nav>
-                    <a href="#" data-text="Home" onclick="navigate('home.html'); return false;">Home</a>
-                    <a href="#" data-text="Art Style" onclick="navigate('artstyle.html'); return false;">Art Style</a>
-                    <a href="#" data-text="Projects" onclick="navigate('projects.html'); return false;">Projects</a>
-                    <a href="#" data-text="Gallery" onclick="navigate('gallery.html'); return false;">Gallery</a>
-                    <a href="#" data-text="Contact" onclick="navigate('contact.html'); return false;">Contact</a>
-                    
-
-
-                </nav>
-
-
-            </header>
-            <section id="main-section">
-
-            </section>
+                <section id="main-section">
+                    <div style="color: #ffff00; text-align: center; padding-top: 50px;">
+                        SYSTEM INITIALIZING...
+                    </div>
+                </section>
+            </div>
         </div>
     </div>
-</div>
 
-            <footer>
-                @ Copyright Mario Dak 2026
-            </footer>
+    <footer>@ Copyright Mario Dak 2026</footer>
 
-<script src="/assets/scripts/vanilla.js"></script>
-<script>
-    window.addEventListener('load', () => {
-  const preloader = document.getElementById('preloader');
-  
-  // Pridáme triedu, ktorá ho plynule skryje
-  preloader.classList.add('loader-hidden');
+    <script>
+        function navigate(file) {
+            const area = document.getElementById('main-section');
+            area.style.opacity = '0.5'; 
 
-  // Po skončení animácie ho úplne odstránime z webu
-  setTimeout(() => {
-    preloader.style.display = 'none';
-  }, 500);
-});
-</script>
+            fetch(file)
+                .then(response => response.text())
+                .then(html => {
+                    area.innerHTML = html;
+                    area.style.opacity = '1';
+                })
+                .catch(err => {
+                    area.innerHTML = "<h1>ERROR 404</h1>";
+                });
+        }
+
+        // TOTO JE KĽÚČ: Vypneme loader až keď prebehne window.load
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            
+            // Spustíme prvú navigáciu hneď
+            navigate('home.html');
+
+            // Necháme štvorec točiť sa aspoň o 300ms dlhšie, aby to Safari stihlo vykresliť
+            setTimeout(() => {
+                preloader.classList.add('loader-hidden');
+                setTimeout(() => { preloader.style.display = 'none'; }, 500);
+            }, 300); 
+        });
+    </script>
 </body>
 </html>
