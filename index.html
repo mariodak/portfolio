@@ -21,19 +21,7 @@
     @keyframes spin { 100% { transform: rotate(360deg); } }
     .loader-hidden { opacity: 0; pointer-events: none; transition: 0.5s; }
 </style>
-<script>
-    window.addEventListener('load', () => {
-  const preloader = document.getElementById('preloader');
-  
-  // Pridáme triedu, ktorá ho plynule skryje
-  preloader.classList.add('loader-hidden');
 
-  // Po skončení animácie ho úplne odstránime z webu
-  setTimeout(() => {
-    preloader.style.display = 'none';
-  }, 500);
-});
-</script>
 <script src="/assets/scripts/main.js" defer></script>
     <script>
   function navigate(file) {
@@ -114,6 +102,18 @@
             </footer>
 
 
+<script>
+    window.addEventListener('load', () => {
+  const preloader = document.getElementById('preloader');
+  
+  // Pridáme triedu, ktorá ho plynule skryje
+  preloader.classList.add('loader-hidden');
 
+  // Po skončení animácie ho úplne odstránime z webu
+  setTimeout(() => {
+    preloader.style.display = 'none';
+  }, 500);
+});
+</script>
 </body>
 </html>
