@@ -15,9 +15,15 @@
     <div id="main-content">
         <div class="page-wrapper">
             
-            <div class="mytitle" data-text="MARIO DAK">
-                <h1>Mario Dak</h1>
-            </div>
+            <div class="mytitle">MARIO DAK</div>
+
+<div id="site-loader">
+    <div class="loader-row">
+        <span class="status-icon">[LOADING ENGINE]</span> 
+        <span id="terminal-output">INITIALIZING...</span>
+        <span id="loader-percentage">0%</span>
+    </div>
+</div>
 
             <div class="portfolio-frame">
                 <div class="inner-mask"></div> 
@@ -25,11 +31,11 @@
                 <div class="content-inside">
                     <header>
                         <nav>
-                            <a href="#" data-text="Home" onclick="navigate('home.html'); return false;">Home</a>
-                            <a href="#" data-text="Art Style" onclick="navigate('artstyle.html'); return false;">Art Style</a>
-                            <a href="#" data-text="Projects" onclick="navigate('projects.html'); return false;">Projects</a>
-                            <a href="#" data-text="Gallery" onclick="navigate('gallery.html'); return false;">Gallery</a>
-                            <a href="#" data-text="Contact" onclick="navigate('contact.html'); return false;">Contact</a>
+                             <a href="#" data-text="Home" onclick="navigate('home.html', this); return false;">Home</a>
+                             <a href="#" data-text="Art Style" onclick="navigate('artstyle.html', this); return false;">Art Style</a>
+                             <a href="#" data-text="Projects" onclick="navigate('projects.html', this); return false;">Projects</a>
+                             <a href="#" data-text="Gallery" onclick="navigate('gallery.html', this); return false;">Gallery</a>
+                             <a href="#" data-text="Contact" onclick="navigate('contact.html', this); return false;">Contact</a>
                         </nav>
                     </header>
 

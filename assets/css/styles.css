@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: Hacked;
   src: url(/assets/font/Hacked-KerX.ttf);
@@ -64,20 +65,56 @@ body {
   font-family: Zilla-Regular;
   overflow-x: hidden;
   background-color: #121212;
-}
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url(/assets/img/background-img.jpg) center/cover;
-  opacity: 0.03;
-  z-index: -1;
-  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
+#site-loader {
+  font-family: "Courier New", Courier, monospace;
+  margin: 30px auto;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+#site-loader .loader-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+}
+#site-loader .status-icon {
+  color: rgb(246, 255, 0);
+  font-weight: bold;
+  animation: yellowPulse 1.5s infinite ease-in-out;
+}
+#site-loader #terminal-output {
+  color: #fff;
+  display: inline-block;
+  white-space: nowrap;
+}
+#site-loader #loader-percentage {
+  color: rgb(246, 255, 0);
+  font-weight: bold;
+  min-width: 40px;
+  text-align: left;
+}
+
+@keyframes yellowPulse {
+  0%, 100% {
+    opacity: 0.8;
+    text-shadow: 0 0 10px rgb(246, 255, 0);
+  }
+  50% {
+    opacity: 0.6;
+    text-shadow: 0 0 7px rgb(246, 255, 0);
+  }
+}
 #main-content {
   opacity: 0;
 }
@@ -105,7 +142,8 @@ body::before {
 
 .mytitle {
   font-family: Hacked;
-  font-size: 4rem;
+  font-size: 8rem;
+  padding-top: 60px;
   color: rgb(246, 255, 0);
   text-shadow: 20px 20px rgba(255, 247, 0, 0.031);
   display: flex;
@@ -122,12 +160,7 @@ body::before {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  -webkit-mask: linear-gradient(135deg, transparent 15px, #121212 15px) bottom left, linear-gradient(135deg, transparent 15px, #121212 15px) top left, linear-gradient(135deg, transparent 15px, #121212 15px) top right, linear-gradient(135deg, transparent 15px, #121212 15px) bottom right;
-  mask: linear-gradient(135deg, transparent 15px, #121212 15px) bottom left, linear-gradient(135deg, transparent 15px, #121212 15px) top left, linear-gradient(135deg, transparent 15px, #121212 15px) top right, linear-gradient(135deg, transparent 15px, #121212 15px) bottom right;
-  -webkit-mask-size: 51% 51%;
-  mask-size: 51% 51%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
+  clip-path: polygon(0% 5.5%, 1% 1%, 4.5% 0%, 95.5% 0%, 99% 1%, 100% 5.5%, 100% 97%, 96.92% 98.22%, 92% 100%, 8% 100%, 3.62% 98.22%, 0% 96.75%);
 }
 .portfolio-frame::before, .portfolio-frame::after {
   content: "";
@@ -148,14 +181,14 @@ body::before {
   right: 1px;
   bottom: 1px;
   background: #121212;
-  clip-path: polygon(0% 5%, 5% 0%, 45% 0%, 48% 2%, 52% 2%, 55% 0%, 95% 0%, 100% 5%, 100% 45%, 100% 50%, 100% 55%, 100% 95%, 95% 100%, 55% 100%, 52% 98%, 48% 98%, 45% 100%, 5% 100%, 0% 95%, 0% 55%, 0% 50%, 0% 45%);
+  clip-path: polygon(0% 5%, 5% 0%, 45% 0%, 48% 2%, 52% 2%, 55% 0%, 95% 0%, 100% 5%, 100% 95%, 92% 100%, 55% 100%, 52% 98%, 48% 98%, 45% 100%, 8% 100%, 0% 95%);
   pointer-events: none;
 }
 .portfolio-frame .content-inside {
   position: relative;
   z-index: 2;
   min-height: 400px;
-  clip-path: polygon(0% 5%, 5% 0%, 45% 0%, 48% 2%, 52% 2%, 55% 0%, 95% 0%, 100% 5%, 100% 45%, 98% 50%, 100% 55%, 100% 95%, 95% 100%, 55% 100%, 52% 98%, 48% 98%, 45% 100%, 5% 100%, 0% 95%, 0% 55%, 2% 50%, 0% 45%);
+  clip-path: polygon(0% 5%, 5% 0%, 45% 0%, 48% 2%, 52% 2%, 55% 0%, 95% 0%, 100% 5%, 100% 95%, 92% 100%, 55% 100%, 52% 98%, 48% 98%, 45% 100%, 8% 100%, 0% 95%);
   outline: 0.6px solid rgba(246, 255, 0, 0.5);
   outline-offset: -2px;
 }
@@ -180,13 +213,13 @@ a {
   font: bold 1.05em Zilla-Bold;
   letter-spacing: 5px;
   position: relative;
-  transition: 0.3s;
+  transition: none;
+  isolation: isolate; /* Vytvorí novú vrstvu, aby farby nič neovplyvňovalo */
 }
-a:hover {
+a:hover, a.active-link {
   color: transparent !important;
-  filter: brightness(1.2) contrast(1.1);
 }
-a:hover::before, a:hover::after {
+a:hover::before, a:hover::after, a.active-link::before, a.active-link::after {
   content: attr(data-text);
   position: absolute;
   top: 0;
@@ -196,25 +229,91 @@ a:hover::before, a:hover::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
-  color: #121212;
+  background-color: #ffffff !important; /* Čistá biela */
+  color: #000 !important; /* Čierny text pre max kontrast */
   font-size: 1.2em;
+  opacity: 1 !important;
+  z-index: 100; /* Musí byť nad všetkým */
+  visibility: visible !important;
 }
-a:hover::before {
-  clip-path: polygon(0% 0%, 100% 0%, 100% 45%, 85% 50%, 100% 55%, 0% 55%);
+a:hover::before, a.active-link::before {
+  clip-path: inset(0 0 51% 0);
+}
+a:hover::after, a.active-link::after {
+  clip-path: inset(51% 0 0 0);
+}
+a:hover:not(.active-link)::before {
   animation: glitch-slice 0.3s infinite;
 }
-a:hover::after {
-  clip-path: polygon(0% 55%, 100% 55%, 100% 100%, 0% 100%, 0% 55%, 15% 50%, 0% 45%);
+a:hover:not(.active-link)::after {
   animation: glitch-slice 0.3s infinite reverse;
+}
+a.active-link {
+  filter: none !important;
+}
+a.active-link::before {
+  transform: translateY(-0.3px) translateX(0.4px);
+  background-color: #ffffff !important;
+}
+a.active-link::after {
+  transform: translateY(0.3px) translateX(-0.4px);
+  background-color: #ffffff !important; /* Tu bola tá zelená, zmenil som na bielu */
+}
+a.active-link {
+  filter: none; /* Toto vypne to zosvetlenie pri kliknutí */
+  outline: none; /* Odstráni modrý/biely rámček prehliadača */
+}
+a.active-link::before {
+  transform: translateY(-1px) translateX(2px);
+  background: #fff; /* Fixná farba */
+}
+a.active-link::after {
+  transform: translateY(1px) translateX(-2px);
+  background: #fff;
 }
 
 section {
   font-family: Zilla-Regular;
 }
 
+.sectiontitle {
+  position: relative;
+  display: block;
+  font-family: Hacked;
+  font-size: 2.5rem;
+  letter-spacing: 25px;
+  color: rgb(246, 255, 0);
+  text-align: center;
+  padding: 50px 0;
+  text-transform: uppercase;
+  overflow: visible;
+}
+.sectiontitle::after {
+  content: attr(data-text);
+  position: absolute;
+  letter-spacing: 30px;
+  /* Keďže máš padding 50px, bottom: 100% ho vyhodí nad nadpis */
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  color: rgb(246, 255, 0);
+  /* PREVRÁTENIE */
+  transform: scaleY(-1);
+  /* FADE EFEKT (Maska) */
+  /* Smerom HORE (to top) ide od plnej farby po úplnú priehľadnosť */
+  -webkit-mask-image: linear-gradient(to top, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%);
+  mask-image: linear-gradient(to top, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%);
+  /* JEMNOSŤ */
+  opacity: 0.3;
+  filter: blur(1px);
+  margin-bottom: -60px;
+  pointer-events: none;
+  z-index: 1;
+}
+
 footer {
-  font: 0.8em Zilla-Regular;
+  font: 0.8rem Zilla-Regular;
+  letter-spacing: 5px;
   color: rgba(246, 255, 0, 0.4);
   text-transform: uppercase;
 }/*# sourceMappingURL=styles.css.map */
