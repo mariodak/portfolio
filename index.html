@@ -29,15 +29,27 @@
                 <div class="inner-mask"></div> 
                 
                 <div class="content-inside">
-                    <header>
-                        <nav>
-                             <a href="#" data-text="Home" onclick="navigate('home.html', this); return false;">Home</a>
-                             <a href="#" data-text="Art Style" onclick="navigate('artstyle.html', this); return false;">Art Style</a>
-                             <a href="#" data-text="Projects" onclick="navigate('projects.html', this); return false;">Projects</a>
-                             <a href="#" data-text="Gallery" onclick="navigate('gallery.html', this); return false;">Gallery</a>
-                             <a href="#" data-text="Contact" onclick="navigate('contact.html', this); return false;">Contact</a>
-                        </nav>
-                    </header>
+                        <header>
+                            <nav class="portfolio-nav">
+                        <div class="active-indicator-mobile">
+                          <a href="#" class="active-link" data-text="HOME">HOME</a>
+                      </div>
+
+                     <div class="nav-links-container" id="main-nav-links">
+             <a href="#" data-text="Home" class="active-link" data-file="home.html">Home</a>
+             <a href="#" data-text="Art Style" onclick="navigate('artstyle.html', this); return false;">Art Style</a>
+             <a href="#" data-text="Projects" onclick="navigate('projects.html', this); return false;">Projects</a>
+             <a href="#" data-text="Gallery" onclick="navigate('gallery.html', this); return false;">Gallery</a>
+             <a href="#" data-text="Contact" onclick="navigate('contact.html', this); return false;">Contact</a>
+         </div>
+
+            <div class="hamburger-menu" id="mobile-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+         </div>
+     </nav>
+     </header>
 
                     <section id="main-section">
                         </section>

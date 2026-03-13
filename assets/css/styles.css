@@ -1,4 +1,3 @@
-@charset "UTF-8";
 @font-face {
   font-family: Hacked;
   src: url(/assets/font/Hacked-KerX.ttf);
@@ -58,10 +57,27 @@
     transform: translateX(0);
   }
 }
+@keyframes yellowPulse {
+  0%, 100% {
+    opacity: 0.8;
+    text-shadow: 0 0 10px rgb(246, 255, 0);
+  }
+  50% {
+    opacity: 0.6;
+    text-shadow: 0 0 7px rgb(246, 255, 0);
+  }
+}
+* {
+  box-sizing: border-box;
+}
+
+* {
+  outline: 1px solid red;
+}
+
 body {
   color: #fff;
-  margin: 0 0 30px 0;
-  text-align: center;
+  margin: 0;
   font-family: Zilla-Regular;
   overflow-x: hidden;
   background-color: #121212;
@@ -80,13 +96,22 @@ body {
   letter-spacing: 1px;
 }
 #site-loader .loader-row {
-  display: inline-flex;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: none;
-  border: none;
-  padding: 0;
+  max-width: 400px;
+  margin: 0 auto;
+}
+@media (max-width: 768px) {
+  #site-loader .loader-row .status-icon {
+    flex-basis: 100%;
+    margin-bottom: 5px;
+  }
+  #site-loader .loader-row #terminal-output, #site-loader .loader-row #loader-percentage {
+    flex: 0 1 auto;
+  }
 }
 #site-loader .status-icon {
   color: rgb(246, 255, 0);
@@ -105,16 +130,6 @@ body {
   text-align: left;
 }
 
-@keyframes yellowPulse {
-  0%, 100% {
-    opacity: 0.8;
-    text-shadow: 0 0 10px rgb(246, 255, 0);
-  }
-  50% {
-    opacity: 0.6;
-    text-shadow: 0 0 7px rgb(246, 255, 0);
-  }
-}
 #main-content {
   opacity: 0;
 }
@@ -135,9 +150,29 @@ body {
 }
 
 .page-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
   width: 100%;
   height: auto;
+}
+@media (max-width: 768px) {
+  .page-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    overflow-x: hidden;
+  }
+}
+.page-wrapper .page-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
 }
 
 .mytitle {
@@ -151,10 +186,36 @@ body {
   line-height: 1;
 }
 
+@media (max-width: 768px) {
+  .portfolio-frame {
+    width: 90% !important;
+    margin: 0;
+    padding: 10px !important;
+    display: flex !important;
+    position: relative !important;
+    left: 0 !important;
+    transform: none !important;
+    border: 5px solid red !important;
+    z-index: 10;
+  }
+  .portfolio-frame .inner-mask, .portfolio-frame .content-inside {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+  }
+  .portfolio-frame .portfolio-nav {
+    width: 100% !important;
+    left: 0 !important;
+    padding: 0 10px !important;
+  }
+  .portfolio-frame .portfolio-nav .active-indicator-mobile {
+    margin-left: 0 !important;
+  }
+}
 .portfolio-frame {
   position: relative;
   width: 80%;
-  margin: 5vh auto 200px;
+  margin: 5vh 0 200px 0;
   padding: 10px;
   min-height: 400px;
   overflow: hidden;
@@ -192,17 +253,24 @@ body {
   outline: 0.6px solid rgba(246, 255, 0, 0.5);
   outline-offset: -2px;
 }
-.portfolio-frame nav {
+.portfolio-frame .active-indicator-mobile {
+  display: none !important;
+}
+.portfolio-frame .portfolio-nav {
   display: flex;
+  z-index: 9999;
   justify-content: center;
   align-items: stretch;
   height: 60px;
   background: rgb(246, 255, 0);
+  position: relative;
   clip-path: polygon(0% 0%, 100% 0%, 100% 70%, 98% 100%, 70% 100%, 68% 90%, 32% 90%, 30% 100%, 2% 100%, 0% 70%);
-  overflow: hidden;
 }
-
-a {
+.portfolio-frame .portfolio-nav .nav-links-container {
+  display: flex;
+  height: 100%;
+}
+.portfolio-frame .portfolio-nav a {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -214,12 +282,12 @@ a {
   letter-spacing: 5px;
   position: relative;
   transition: none;
-  isolation: isolate; /* Vytvorí novú vrstvu, aby farby nič neovplyvňovalo */
+  isolation: isolate;
 }
-a:hover, a.active-link {
+.portfolio-frame .portfolio-nav a:hover, .portfolio-frame .portfolio-nav a.active-link {
   color: transparent !important;
 }
-a:hover::before, a:hover::after, a.active-link::before, a.active-link::after {
+.portfolio-frame .portfolio-nav a:hover::before, .portfolio-frame .portfolio-nav a:hover::after, .portfolio-frame .portfolio-nav a.active-link::before, .portfolio-frame .portfolio-nav a.active-link::after {
   content: attr(data-text);
   position: absolute;
   top: 0;
@@ -229,49 +297,137 @@ a:hover::before, a:hover::after, a.active-link::before, a.active-link::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff !important; /* Čistá biela */
-  color: #000 !important; /* Čierny text pre max kontrast */
+  background-color: #ffffff !important;
+  color: #000 !important;
   font-size: 1.2em;
   opacity: 1 !important;
-  z-index: 100; /* Musí byť nad všetkým */
+  z-index: 100;
   visibility: visible !important;
 }
-a:hover::before, a.active-link::before {
+.portfolio-frame .portfolio-nav a:hover::before, .portfolio-frame .portfolio-nav a.active-link::before {
   clip-path: inset(0 0 51% 0);
 }
-a:hover::after, a.active-link::after {
+.portfolio-frame .portfolio-nav a:hover::after, .portfolio-frame .portfolio-nav a.active-link::after {
   clip-path: inset(51% 0 0 0);
 }
-a:hover:not(.active-link)::before {
+.portfolio-frame .portfolio-nav a:hover:not(.active-link)::before {
   animation: glitch-slice 0.3s infinite;
 }
-a:hover:not(.active-link)::after {
+.portfolio-frame .portfolio-nav a:hover:not(.active-link)::after {
   animation: glitch-slice 0.3s infinite reverse;
 }
-a.active-link {
+.portfolio-frame .portfolio-nav a.active-link {
   filter: none !important;
 }
-a.active-link::before {
-  transform: translateY(-0.3px) translateX(0.4px);
-  background-color: #ffffff !important;
+.portfolio-frame .portfolio-nav a.active-link::before {
+  transform: translateY(-0.6px) translateX(1.5px);
+  background: #fff !important;
 }
-a.active-link::after {
-  transform: translateY(0.3px) translateX(-0.4px);
-  background-color: #ffffff !important; /* Tu bola tá zelená, zmenil som na bielu */
-}
-a.active-link {
-  filter: none; /* Toto vypne to zosvetlenie pri kliknutí */
-  outline: none; /* Odstráni modrý/biely rámček prehliadača */
-}
-a.active-link::before {
-  transform: translateY(-1px) translateX(2px);
-  background: #fff; /* Fixná farba */
-}
-a.active-link::after {
-  transform: translateY(1px) translateX(-2px);
-  background: #fff;
+.portfolio-frame .portfolio-nav a.active-link::after {
+  transform: translateY(0.6px) translateX(-1.5px);
+  background: #fff !important;
 }
 
+@media (max-width: 768px) {
+  .portfolio-frame .portfolio-nav {
+    justify-content: space-between;
+    padding: 0 30px;
+    clip-path: none;
+    height: 60px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  .portfolio-frame .portfolio-nav .active-indicator-mobile {
+    display: flex !important;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    align-items: stretch;
+    overflow: hidden;
+  }
+  .portfolio-frame .portfolio-nav .active-indicator-mobile a {
+    width: auto;
+    height: 100%;
+    padding: 0 20px;
+    margin: 0;
+    line-height: 1;
+    background: transparent !important;
+    color: transparent !important;
+    font: bold 0.9em Zilla-Bold;
+    letter-spacing: 5px;
+    position: relative;
+    text-transform: uppercase;
+  }
+  .portfolio-frame .portfolio-nav .active-indicator-mobile a::before, .portfolio-frame .portfolio-nav .active-indicator-mobile a::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff !important;
+    color: #000 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 10;
+  }
+  .portfolio-frame .portfolio-nav .active-indicator-mobile a::before {
+    clip-path: inset(0 0 51% 0);
+    transform: translateY(-0.6px) translateX(1.5px);
+  }
+  .portfolio-frame .portfolio-nav .active-indicator-mobile a::after {
+    clip-path: inset(51% 0 0 0);
+    transform: translateY(0.6px) translateX(-1.5px);
+  }
+  .portfolio-frame .portfolio-nav .hamburger-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 100000 !important;
+  }
+  .portfolio-frame .portfolio-nav .hamburger-menu span {
+    width: 25px;
+    height: 3px;
+    background: #121212;
+    transition: 0.3s;
+  }
+  .portfolio-frame .portfolio-nav .hamburger-menu.is-active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .portfolio-frame .portfolio-nav .hamburger-menu.is-active span:nth-child(2) {
+    opacity: 0;
+  }
+  .portfolio-frame .portfolio-nav .hamburger-menu.is-active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+  .portfolio-frame .portfolio-nav .nav-links-container {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: rgb(246, 255, 0);
+    flex-direction: column;
+    height: auto;
+    z-index: 99999 !important;
+    padding: 0px 0;
+    border-bottom: 2px solid #121212;
+  }
+  .portfolio-frame .portfolio-nav .nav-links-container.is-open {
+    display: flex !important;
+  }
+  .portfolio-frame .portfolio-nav .nav-links-container a {
+    width: 100%;
+    height: 50px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+}
 section {
   font-family: Zilla-Regular;
 }
@@ -292,18 +448,13 @@ section {
   content: attr(data-text);
   position: absolute;
   letter-spacing: 30px;
-  /* Keďže máš padding 50px, bottom: 100% ho vyhodí nad nadpis */
   bottom: 100%;
   left: 0;
   width: 100%;
   color: rgb(246, 255, 0);
-  /* PREVRÁTENIE */
   transform: scaleY(-1);
-  /* FADE EFEKT (Maska) */
-  /* Smerom HORE (to top) ide od plnej farby po úplnú priehľadnosť */
   -webkit-mask-image: linear-gradient(to top, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%);
   mask-image: linear-gradient(to top, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 80%);
-  /* JEMNOSŤ */
   opacity: 0.3;
   filter: blur(1px);
   margin-bottom: -60px;

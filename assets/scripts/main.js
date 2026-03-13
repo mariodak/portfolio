@@ -1,52 +1,26 @@
-// --- CONFIG ---
-const LOAD_SPEED_MS = 400;  // Extrémna rýchlosť pre efekt "kmitania"
-// --------------
+// --- CONFIG & DATA ---
+const LOAD_SPEED_MS = 400;
 
 const codeSnippets = [
     "color: $main-color", "status-icon", "div class='row'", "href='#'", "return false",
     "const LOAD_SPEED", "document.getElem", "window.addEvent", "opacity: 0", "display: none",
     "flex-direction: col", "margin: 20px auto", "z-index: 999", "position: absolute", "pointer-events: none",
     "requestAnimationFrame", "Math.random()", "performance.now()", "fetch(file.url)", "if(!output) return",
-    "@keyframes blink", "box-shadow: 0 0 10px", "transform: rotate(360)", "transition: 0.3s", "clip-path: polygon",
-    "nav > a:hover", "letter-spacing: 5px", "font-family: Hacked", "src: url(/assets/)", "background: conic-gradient",
-    "content: attr(data-text)", "filter: brightness(1.2)", "animation: rotateSnake", "mask-size: 51%", "outline: 0.6px solid",
-    "area.innerHTML = html", "console.error(err)", "classList.add('active')", "setTimeout(() => {", "await new Promise",
-    "let progress = 0", "clearInterval(interval)", "hex.toString(16)", "prefixes[Math.floor]", "generateCyberFiles",
-    "while(true)", "async function", "<body>", "<nav>", "<footer>", "header > nav", ".portfolio-frame",
-    ".inner-mask", ".content-inside", "#site-loader", ".loader-row", "#terminal-output", ".status-icon",
-    "text-transform: upper", "font-weight: bold", "opacity: 1 !important", "will-change: width", "steps(1) infinite",
-    "rgba(246, 255, 0, 0.5)", "linear-gradient(135deg)", "perspective(1000px)", "backface-visibility", "translateZ(0)",
-    "-webkit-font-smoothing", "contain: paint", "min-height: 400px", "text-shadow: 20px 20px", "line-height: 1",
-    "url(/img/bg.jpg)", "fixed; top: 0; left: 0", "user-select: none", "overflow-x: hidden", "cursor: pointer",
-    "event.preventDefault()", "history.pushState", "location.reload()", "JSON.parse(data)", "localStorage.set",
-    "document.body.style", "window.innerHeight", "element.getAttribute", "new IntersectionObs", "forEach(el => {",
-    "Math.floor(Math.random)", "Array.from({length: 200})", "setTimeout(r, 10)", "bar.style.width", "percent + '%'",
-    "console.log('INIT...')", "system.status = 'READY'", "kernel_check: OK", "buffer_load: 100%", "access_level: ROOT",
-    "protocol: CYBERNET", "v1.0.26_build", "encryption: AES-256", "handshake: SUCCESS", "port: 5500", "host: 0.0.0.0",
-    "GET /assets/scripts", "HTTP/1.1 200 OK", "Content-Type: text/js", "Cache-Control: no-cache", "Connection: keep-alive",
-    "0% { opacity: 1 }", "50% { opacity: 0 }", ".mytitle { font-size: 4rem }", "border: 1px solid", "padding: 10px",
-    "display: flex", "justify-content: center", "align-items: stretch", "height: 60px", "background: $bg-color",
-    "polygon(0% 5%, 5% 0%)", "clip-path: inset(0)", "pointer-events: auto", "transition: transform 1s", "ease-in-out",
-    "input:focus", "button::after", "::selection { background }", "::-webkit-scrollbar", "width: 4px", "thumb: $main-color",
-    "var(--primary-glow)", "calc(100% - 20px)", "max-width: 450px", "border-radius: 0", "border-top-left: 15px",
-    "transform: translateY(-20)", "box-sizing: border-box", "visibility: visible", "none !important", "vertical-align: middle"
+    "system.status = 'READY'", "kernel_check: OK", "buffer_load: 100%", "access_level: ROOT",
+    "protocol: CYBERNET", "v1.0.26_build", "encryption: AES-256", "handshake: SUCCESS"
 ];
 
+// --- LOADER ENGINE ---
 async function startCodeLoop() {
     const output = document.getElementById('terminal-output');
     const percentDisplay = document.getElementById('loader-percentage');
     
     if (!output || !percentDisplay) return;
 
-    // Nekonečná slučka
     while (true) {
         for (let snippet of codeSnippets) {
             output.innerText = snippet;
-            
-            // Mikro-loading pre každý snippet
             await animateSnippetProgress(percentDisplay, LOAD_SPEED_MS);
-            
-            // Blesková pauza medzi kúskami kódu
             await new Promise(r => setTimeout(r, 15));
         }
     }
@@ -70,45 +44,103 @@ function animateSnippetProgress(display, duration) {
     });
 }
 
-window.addEventListener('load', startCodeLoop);
-
-
-
-// put main link active
-window.addEventListener('DOMContentLoaded', () => {
-    // 1. Nájdi prvý odkaz v nav a pridaj mu triedu active-link
-    const homeLink = document.querySelector('nav a');
-    if (homeLink) homeLink.classList.add('active-link');
-
-    // 2. Tvoj existujúci kód pre načítanie home.html
-    navigate('home.html'); 
-});
-
-
+// --- NAVIGATION CORE ---
 function navigate(file, element) {
     const area = document.getElementById('main-section');
+    const menu = document.getElementById('main-nav-links');
+    const toggle = document.getElementById('mobile-toggle');
+    const mobileIndicator = document.querySelector('.active-indicator-mobile a');
+
     if (!area) return;
 
-    // --- TÁTO ČASŤ JE KĽÚČOVÁ PRE ACTIVE STAV ---
+    // Vizuálny update navigácie
     if (element) {
-        // Zoberie active-link všetkým buttonom
-        document.querySelectorAll('nav a').forEach(link => {
+        document.querySelectorAll('.nav-links-container a').forEach(link => {
             link.classList.remove('active-link');
         });
-        // Pridá ho len tomu, na ktorý si práve klikol
         element.classList.add('active-link');
-    }
-    // --------------------------------------------
 
-    // ... zvyšok tvojho fetch kódu ...
+        // Update mobilného indikátora (toho textu vľavo hore na mobile)
+        if (mobileIndicator) {
+            const txt = element.getAttribute('data-text').toUpperCase();
+            mobileIndicator.innerText = txt;
+            mobileIndicator.setAttribute('data-text', txt);
+        }
+
+        // Ak sme na mobile a menu je otvorené, zavrieme ho po kliknutí
+        if (menu && menu.classList.contains('is-open')) {
+            menu.classList.remove('is-open');
+            toggle.classList.remove('is-active');
+        }
+    }
+
+    // Animácia prechodu obsahu
     area.style.opacity = '0';
     setTimeout(() => {
         fetch(file)
-            .then(res => res.text())
+            .then(res => {
+                if (!res.ok) throw new Error('SYSTEM_ERROR: DATA_LOST');
+                return res.text();
+            })
             .then(html => {
                 area.innerHTML = html;
                 area.style.opacity = '1';
+            })
+            .catch(err => {
+                area.innerHTML = "<h2 style='text-align:center; color:#ff0000;'>SYSTEM_ERROR: " + err.message + "</h2>";
+                area.style.opacity = '1';
             });
-    }, 200);
+    }, 250);
 }
 
+// --- INITIALIZATION ---
+window.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('mobile-toggle');
+    const menu = document.getElementById('main-nav-links');
+    const navLinks = document.querySelectorAll('.nav-links-container a');
+
+    // 1. Spustenie loaderu
+    startCodeLoop();
+
+    // 2. Hamburger menu event
+    if (toggle && menu) {
+        toggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation(); // Kritické: zabráni zavretiu hneď po otvorení
+            toggle.classList.toggle('is-active');
+            menu.classList.toggle('is-open');
+            console.log("System: Hamburger state toggled.");
+        });
+    }
+
+    // 3. Obsluha linkov (nahrádza starý onclick v HTML)
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Získame súbor z data-text (napr. Home -> home.html) 
+            // alebo si do HTML pridaj data-file="home.html" pre istotu
+            let file = link.getAttribute('data-text').toLowerCase() + ".html";
+            
+            // Špeciálny prípad pre Art Style kvôli medzere
+            if (file === "art style.html") file = "artstyle.html"; 
+            
+            navigate(file, link);
+        });
+    });
+
+    // 4. Zavrieť menu pri kliknutí mimo neho (UX vychytávka)
+    document.addEventListener('click', (e) => {
+        if (menu && menu.classList.contains('is-open')) {
+            if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+                menu.classList.remove('is-open');
+                toggle.classList.remove('is-active');
+            }
+        }
+    });
+
+    // 5. Načítanie úvodnej stránky (Home)
+    const homeLink = document.querySelector('.nav-links-container a.active-link') || navLinks[0];
+    if (homeLink) {
+        navigate('home.html', homeLink);
+    }
+});

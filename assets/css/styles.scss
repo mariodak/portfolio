@@ -21,27 +21,35 @@ $anime-time: 8s;
   75% { transform: translateX(2px); }
   100% { transform: translateX(0); }
 }
+@keyframes yellowPulse {
+  0%, 100% { opacity: 0.8; text-shadow: 0 0 10px $main-color; }
+  50% { opacity: 0.6; text-shadow: 0 0 7px $main-color; }
+}
 
 // 4. GLOBAL & BODY
+
+* {
+  box-sizing: border-box; // Toto zabezpečí, že padding nepridáva k šírke
+}
+
+*{
+ outline:1px solid red;
+}
+
 body {
   color: #fff;
-  margin: 0 0 30px 0;
-  text-align: center;
+  margin: 0;
   font-family: Zilla-Regular;
   overflow-x: hidden;
   background-color: $bg-color;
-  // ZABLOKOVANIE OZNAČOVANIA TEXTU
-  -webkit-user-select: none;  // Chrome, Safari, Opera
-  -moz-user-select: none;     // Firefox
-  -ms-user-select: none;      // IE/Edge
-  user-select: none;          // Standard
-  
-  // ZABLOKOVANIE DRAG & DROP (napr. obrázkov)
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   -webkit-user-drag: none;
 }
 
-// loader
-// --- LOADER STYLE ---
+// 5. LOADER
 #site-loader {
   font-family: 'Courier New', Courier, monospace;
   margin: 30px auto;
@@ -51,16 +59,29 @@ body {
   letter-spacing: 1px;
 
   .loader-row {
-    display: inline-flex;
+    display: flex;        // Zmeníme inline-flex na flex
+    flex-wrap: wrap;      // Povolíme riadkovanie
     align-items: center;
     justify-content: center;
     gap: 8px;
-    // VYMAZALI SME: background, border, padding
-    background: none; 
-    border: none;
-    padding: 0;
-  }
+    max-width: 400px;     // Poistka, aby sa to nerozliezlo moc do strán
+    margin: 0 auto;
 
+    @media (max-width: 768px) {
+      // 1. Nápis [LOADING ENGINE] prinútime zabrať celý horný riadok
+      .status-icon {
+        flex-basis: 100%;  // Toto ho hodí do samostatného riadku
+        margin-bottom: 5px; // Malá medzera medzi riadkami
+      }
+
+      // 2. Ostatné prvky (terminal-output a loader-percentage) 
+      // ostanú automaticky vedľa seba v druhom riadku
+      #terminal-output, #loader-percentage {
+        flex: 0 1 auto;    // Budú sa správať ako klasické prvky vedľa seba
+      }
+
+  }
+}
   .status-icon {
     color: $main-color;
     font-weight: bold;
@@ -71,7 +92,6 @@ body {
     color: #fff;
     display: inline-block;
     white-space: nowrap;
-    // Žiadne fixné rozmery, nech to voľne "dýcha"
   }
 
   #loader-percentage {
@@ -82,14 +102,7 @@ body {
   }
 }
 
-// Ten istý keyframes pre pulzovanie žltej
-@keyframes yellowPulse {
-  0%, 100% { opacity: 0.8; text-shadow: 0 0 10px $main-color; }
-  50% { opacity: 0.6; text-shadow: 0 0 7px $main-color; }
-}
-
-
-// 5. LAYOUT & CONTAINERS
+// 6. LAYOUT & CONTAINERS
 #main-content { opacity: 0; }
 .fade-in-active { animation: welcomeFade 1.2s ease-out forwards; }
 
@@ -99,13 +112,31 @@ body {
   backface-visibility: hidden;
   transform: translateZ(0);
   -webkit-font-smoothing: antialiased;
-  
   * { contain: paint; }
 }
 
-.page-wrapper { position: relative; width: 100%; height: auto; }
+.page-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; width: 100%; height: auto;
+@media (max-width: 768px) {
+    & {
+    display: flex;
+    flex-direction: column;
+    align-items: center; // Flexbox vycentruje rám oveľa lepšie ako margin auto
+    width: 100%;
+    overflow-x: hidden;
+  }
+}
+  
+  // 3. TOTO JE KĽÚČ: Vypni centrovanie textu na rodičovi, ktoré to môže posúvať
+  .page-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center; // Flexbox vycentruje rám oveľa lepšie ako margin auto
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
+  }
+}
 
-// 6. COMPONENTS
 .mytitle {
   font-family: Hacked;
   font-size: 8rem;
@@ -117,22 +148,52 @@ body {
   line-height: 1;
 }
 
+// 7. PORTFOLIO FRAME & NAVIGATION
+
+@media (max-width: 768px) {
+  .portfolio-frame {
+    width: 90% !important;
+    // Musíš zadať všetky 4 strany alebo len dve, aby to auto fungovalo
+    margin: 0;
+    padding: 10px !important;
+    display: flex !important;
+    position: relative !important;
+    left: 0 !important;
+    transform: none !important;
+    // Ak nevidno outline, skús border, ten pretlačí takmer všetko
+    border: 5px solid red !important; 
+    z-index: 10;
+    
+    .inner-mask, .content-inside {
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      // Ak je clip-path na mobile moc zložitý, skús ho na test vypnúť:
+      // clip-path: none !important; 
+    }
+
+    .portfolio-nav {
+      width: 100% !important;
+      left: 0 !important;
+      padding: 0 10px !important; // Trochu dychu pre hamburger
+      
+      .active-indicator-mobile {
+          margin-left: 0 !important; // Vynuluj prípadné posuny
+      }
+    }
+  }
+}
+
 .portfolio-frame {
   position: relative;
   width: 80%;
-  margin: 5vh auto 200px;
+  margin: 5vh 0 200px 0;
   padding: 10px;
   min-height: 400px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   clip-path: polygon(0% 5.5%, 1% 1%, 4.5% 0%, 95.5% 0%, 99% 1%, 100% 5.5%, 100% 97%, 96.92% 98.22%, 92% 100%, 8% 100%, 3.62% 98.22%, 0% 96.75%);
-// $mask: linear-gradient(135deg, transparent 15px, $bg-color 15px);
-  // -webkit-mask: $mask bottom left, $mask top left, $mask top right, $mask bottom right;
-  // mask: $mask bottom left, $mask top left, $mask top right, $mask bottom right;
- // -webkit-mask-size: 51% 51%; mask-size: 51% 51%;
-  // -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-
   &::before, &::after {
     content: '';
     position: absolute;
@@ -141,6 +202,7 @@ body {
     background: conic-gradient(transparent, rgba($main-color, 0.2) 10%, $main-color 40%, transparent 45%);
     animation: rotateSnake $anime-time linear infinite;
   }
+  
 
   .inner-mask {
     position: absolute;
@@ -160,101 +222,178 @@ body {
     outline-offset: -2px;
   }
 
-  nav {
+  // TU BOLA CHYBA - nav musí byť správne v hiearchii
+
+  .active-indicator-mobile {
+    display: none !important;
+  }
+
+
+  .portfolio-nav {
     display: flex;
+    z-index: 9999;
     justify-content: center;
     align-items: stretch;
     height: 60px;
     background: $main-color;
+    position: relative;
     clip-path: polygon(0% 0%, 100% 0%, 100% 70%, 98% 100%, 70% 100%, 68% 90%, 32% 90%, 30% 100%, 2% 100%, 0% 70%);
-    overflow: hidden;
+
+    .nav-links-container {
+      display: flex;
+      height: 100%;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 150px;
+      height: 100%;
+      text-decoration: none;
+      color: $bg-color;
+      font: bold 1.05em Zilla-Bold;
+      letter-spacing: 5px;
+      position: relative;
+      transition: none;
+      isolation: isolate;
+
+      &:hover, &.active-link {
+        color: transparent !important;
+        &::before, &::after {
+          content: attr(data-text);
+          position: absolute;
+          top: 0; left: 0; width: 100%; height: 100%;
+          display: flex; align-items: center; justify-content: center;
+          background-color: #ffffff !important;
+          color: #000 !important;
+          font-size: 1.2em;
+          opacity: 1 !important; 
+          z-index: 100;
+          visibility: visible !important;
+        }
+        &::before { clip-path: inset(0 0 51% 0); }
+        &::after  { clip-path: inset(51% 0 0 0); }
+      }
+
+      &:hover:not(.active-link) {
+        &::before { animation: glitch-slice 0.3s infinite; }
+        &::after  { animation: glitch-slice 0.3s infinite reverse; }
+      }
+
+      &.active-link {
+        filter: none !important;
+        &::before { transform: translateY(-0.6px) translateX(1.5px); background: #fff !important; }
+        &::after  { transform: translateY(0.6px) translateX(-1.5px); background: #fff !important; }
+      }
+    }
   }
 }
 
-// 7. NAVIGATION LINKS
-// 7. NAVIGATION LINKS
-// 7. NAVIGATION LINKS
-a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 150px;
-  height: 100%;
-  text-decoration: none;
-  color: $bg-color;
-  font: bold 1.05em Zilla-Bold;
-  letter-spacing: 5px;
-  position: relative;
-  transition: none;
-  isolation: isolate; /* Vytvorí novú vrstvu, aby farby nič neovplyvňovalo */
+// 8. MOBILE MENU (OPRAVENÉ VNÚTORNÉ VOLANIE)
+@media (max-width: 768px) {
+  .portfolio-frame .portfolio-nav {
+    justify-content: space-between;
+    padding: 0 30px;
+    clip-path: none;
+    height: 60px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
-  &:hover, &.active-link {
-    color: transparent !important;
-    
-    &::before, &::after {
-      content: attr(data-text);
+    .active-indicator-mobile {
+      display: flex !important;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      align-items: stretch;
+      overflow: hidden;
+      a {
+        width: auto;
+        height: 100%;
+        padding: 0 20px;
+        margin: 0;
+        line-height: 1;
+        background: transparent !important;
+        color: transparent !important; // Skryjeme pôvodný text, aby ho nahradil glitch
+        font: bold 0.9em Zilla-Bold;
+        letter-spacing: 5px;
+        position: relative;
+        text-transform: uppercase;
+        
+        // --- AKTÍVNY GLITCH EFEKT ---
+        &::before, &::after {
+          content: attr(data-text); // Použije text, ktorý tam posiela JS
+          position: absolute;
+          top: 0; left: 0; width: 100%; height: 100%;
+          display: flex; align-items: center; justify-content: center;
+          background-color: #ffffff !important;
+          color: #000 !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          z-index: 10;
+        }
+
+        // Horná polovica textu
+        &::before {
+          clip-path: inset(0 0 51% 0);
+          transform: translateY(-0.6px) translateX(1.5px); // Jemný posun
+        }
+
+        // Dolná polovica textu
+        &::after {
+          clip-path: inset(51% 0 0 0);
+          transform: translateY(0.6px) translateX(-1.5px); // Jemný posun opačne
+        }
+      }
+    }
+  
+
+    .hamburger-menu {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      pointer-events: auto !important;
+      position: relative; 
+      z-index: 100000 !important;
+      span { width: 25px; height: 3px; background: $bg-color; transition: 0.3s; }
+      
+      &.is-active {
+        span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        span:nth-child(2) { opacity: 0; }
+        span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+      }
+    }
+
+    .nav-links-container {
+      display: none;
       position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
-      background-color: #ffffff !important; /* Čistá biela */
-      color: #000 !important; /* Čierny text pre max kontrast */
-      font-size: 1.2em;
-      opacity: 1 !important; 
-      z-index: 100; /* Musí byť nad všetkým */
-      visibility: visible !important;
-    }
+      top: 60px; left: 0; width: 100%;
+      background: $main-color;
+      flex-direction: column;
+      height: auto;
+      z-index: 99999 !important; 
+      padding: 0px 0;
+      border-bottom: 2px solid $bg-color;
 
-    &::before { clip-path: inset(0 0 51% 0); }
-    &::after  { clip-path: inset(51% 0 0 0); }
-  }
-
-  &:hover:not(.active-link) {
-    &::before { animation: glitch-slice 0.3s infinite; }
-    &::after  { animation: glitch-slice 0.3s infinite reverse; }
-  }
-
-  &.active-link {
-    filter: none !important;
-    
-    &::before { 
-      transform: translateY(-0.3px) translateX(0.4px);
-      background-color: #ffffff !important;
-    }
-    &::after  { 
-      transform: translateY(0.3px) translateX(-0.4px);
-      background-color: #ffffff !important; /* Tu bola tá zelená, zmenil som na bielu */
-    }
-  }
-
-
-  // IBA AKTÍVNY - Žiadne blikanie, žiaden filter, len čistý rez
-  &.active-link {
-    filter: none; /* Toto vypne to zosvetlenie pri kliknutí */
-    outline: none; /* Odstráni modrý/biely rámček prehliadača */
-    
-    &::before { 
-      transform: translateY(-1px) translateX(2px);
-      background: #fff; /* Fixná farba */
-    }
-    &::after  { 
-      transform: translateY(1px) translateX(-2px);
-      background: #fff;
+      &.is-open { display: flex !important; }
+      a { width: 100%; height: 50px; border-top: 1px solid rgba(0,0,0,0.1); }
     }
   }
 }
-// 8. FOOTER & MISC
-section { font-family: Zilla-Regular; }
 
+// 9. FOOTER & TITLES
+section { font-family: Zilla-Regular; }
 
 .sectiontitle {
   position: relative;
   display: block;
-  font-family: Hacked; // Vrátime tvoj font
+  font-family: Hacked;
   font-size: 2.5rem;
   letter-spacing: 25px;
   color: $main-color;
   text-align: center;
-  padding: 50px 0; // Tvoja poistka, aby tieň nezmizol
+  padding: 50px 0;
   text-transform: uppercase;
   overflow: visible;
 
@@ -262,25 +401,16 @@ section { font-family: Zilla-Regular; }
     content: attr(data-text);
     position: absolute;
     letter-spacing: 30px;
-    /* Keďže máš padding 50px, bottom: 100% ho vyhodí nad nadpis */
     bottom: 100%; 
     left: 0;
     width: 100%;
     color: $main-color;
-    
-    /* PREVRÁTENIE */
     transform: scaleY(-1);
-    
-    /* FADE EFEKT (Maska) */
-    /* Smerom HORE (to top) ide od plnej farby po úplnú priehľadnosť */
     -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
     mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
-    
-    /* JEMNOSŤ */
-    opacity: 0.3; // Tieň by nemal svietiť tak silno ako originál
-    filter: blur(1px); // Jemné rozostrenie pre "shadow" look
-    
-    margin-bottom: -60px; // Prisaj ho bližšie k textu, ak je moc vysoko
+    opacity: 0.3;
+    filter: blur(1px);
+    margin-bottom: -60px;
     pointer-events: none;
     z-index: 1;
   }
