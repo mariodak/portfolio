@@ -1,58 +1,62 @@
 <!doctype html>
 <html lang="sk">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Mario Dak - Portfolio</title>
-    
+
     <link rel="stylesheet" href="assets/css/styles.css" />
 
     <style>
     </style>
 </head>
+
 <body>
 
     <div id="main-content">
         <div class="page-wrapper">
-            
+
             <div class="mytitle">MARIO DAK</div>
 
-<div id="site-loader">
-    <div class="loader-row">
-        <span class="status-icon">[LOADING ENGINE]</span> 
-        <span id="terminal-output">INITIALIZING...</span>
-        <span id="loader-percentage">0%</span>
-    </div>
-</div>
+            <div id="site-loader">
+                <div class="loader-row">
+                    <span class="status-icon">[LOADING ENGINE]</span>
+                    <span id="terminal-output">INITIALIZING...</span>
+                    <span id="loader-percentage">0%</span>
+                </div>
+            </div>
 
             <div class="portfolio-frame">
-                <div class="inner-mask"></div> 
-                
+                <div class="inner-mask"></div>
+
                 <div class="content-inside">
-                        <header>
-                            <nav class="portfolio-nav">
-                        <div class="active-indicator-mobile">
-                          <a href="#" class="active-link" data-text="HOME">HOME</a>
-                      </div>
+                    <header>
+                        <nav class="portfolio-nav">
+                            <div class="active-indicator-mobile">
+                                <a href="#" class="active-link" data-text="HOME">HOME</a>
+                            </div>
 
-                     <div class="nav-links-container" id="main-nav-links">
-             <a href="#" data-text="Home" class="active-link" data-file="home.html">Home</a>
-             <a href="#" data-text="Art Style" onclick="navigate('artstyle.html', this); return false;">Art Style</a>
-             <a href="#" data-text="Projects" onclick="navigate('projects.html', this); return false;">Projects</a>
-             <a href="#" data-text="Gallery" onclick="navigate('gallery.html', this); return false;">Gallery</a>
-             <a href="#" data-text="Contact" onclick="navigate('contact.html', this); return false;">Contact</a>
-         </div>
+                            <div class="nav-links-container" id="main-nav-links">
+                                <a href="#" data-text="About Me" class="active-link"
+                                    data-file="assets/pages/aboutme.html">About Me</a>
 
-            <div class="hamburger-menu" id="mobile-toggle">
-            <span></span>
-            <span></span>
-            <span></span>
-         </div>
-     </nav>
-     </header>
+                                <a href="#" data-text="Art style" data-file="assets/pages/artstyle.html">Art style</a>
+                                <a href="#" data-text="Projects" data-file="assets/pages/projects.html">Projects</a>
+                                <a href="#" data-text="Gallery" data-file="assets/pages/gallery.html">Gallery</a>
+                                <a href="#" data-text="Contact" data-file="assets/pages/contact.html">Contact</a>
+                            </div>
+
+                            <div class="hamburger-menu" id="mobile-toggle">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </nav>
+                    </header>
 
                     <section id="main-section">
-                        </section>
+                    </section>
                 </div>
             </div>
         </div>
@@ -63,7 +67,7 @@
     </div>
 
     <script>
-        // Funkcia na prepínanie podstránok
+
         function navigate(file) {
             const area = document.getElementById('main-section');
             if (!area) return;
@@ -79,7 +83,7 @@
                     .then(html => {
                         area.innerHTML = html;
                         area.style.opacity = '1';
-                        
+
                     })
                     .catch(err => {
                         area.innerHTML = "<h2 style='text-align:center; color:#ffff00;'>SYSTEM_ERROR: DATA_LOST</h2>";
@@ -91,9 +95,9 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             const mainContent = document.getElementById('main-content');
-            
+
             mainContent.classList.add('fade-in-active');
-            
+
             navigate('home.html');
         });
     </script>
@@ -102,4 +106,5 @@
     <script src="assets/scripts/vanilla.js" defer></script>
 
 </body>
+
 </html>
