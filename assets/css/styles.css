@@ -554,4 +554,69 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.contact-link a {
+  text-decoration: none;
+  text-align: center;
+}
+
+.contact-link a[href*=facebook] {
+  color: rgb(0, 106, 255);
+}
+.contact-link a[href*=facebook] .c-box {
+  border-color: rgba(0, 106, 255, 0.2);
+  background: rgba(0, 106, 255, 0.1);
+}
+.contact-link a[href*=facebook] .c-box::before {
+  display: none !important;
+}
+.contact-link a[href*=facebook]:hover .c-box {
+  border-color: rgb(0, 106, 255) !important;
+  background: rgba(0, 106, 255, 0.15) !important;
+}
+
+.contact-link a[href*=instagram] {
+  color: rgb(224, 43, 121) !important;
+}
+.contact-link a[href*=instagram] .c-box {
+  border-color: rgba(224, 43, 121, 0.2) !important;
+  background: rgba(224, 43, 121, 0.1) !important;
+}
+.contact-link a[href*=instagram] .c-box::before {
+  display: none !important;
+}
+.contact-link a[href*=instagram]:hover .c-box {
+  border-color: rgb(224, 43, 121) !important;
+  background: rgba(224, 43, 121, 0.15) !important;
+}
+
+.contact-link a[href*=linkedin] {
+  color: rgb(43, 161, 224) !important;
+}
+.contact-link a[href*=linkedin] .c-box {
+  border-color: rgba(43, 161, 224, 0.2) !important;
+  background: rgba(43, 161, 224, 0.1) !important;
+}
+.contact-link a[href*=linkedin] .c-box::before {
+  display: none !important;
+}
+.contact-link a[href*=linkedin]:hover .c-box {
+  border-color: rgb(43, 161, 224) !important;
+  background: rgba(43, 161, 224, 0.15) !important;
+}
+
+.contact-link a[href*="e.mariodak@gmail.com"] {
+  color: rgb(246, 255, 0) !important;
+}
+.contact-link a[href*="e.mariodak@gmail.com"] .c-box {
+  border-color: rgba(246, 255, 0, 0.2) !important;
+  background: rgba(246, 255, 0, 0.1) !important;
+}
+.contact-link a[href*="e.mariodak@gmail.com"] .c-box::before {
+  display: none !important;
+}
+.contact-link a[href*="e.mariodak@gmail.com"]:hover .c-box {
+  border-color: rgb(246, 255, 0) !important;
+  background: rgba(246, 255, 0, 0.15) !important;
 }/*# sourceMappingURL=styles.css.map */

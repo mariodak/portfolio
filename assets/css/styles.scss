@@ -490,3 +490,92 @@ footer {
   align-items: center;
   justify-content: center;
 }
+
+.contact-link a {
+  text-decoration: none;
+  text-align: center;
+}
+
+
+.contact-link a[href*="facebook"] {
+  // 1. ZÁKLADNÝ STAV (Bez hoveru)
+  color: rgb(0, 106, 255); // alebo tvoja základná biela/žltá
+
+  .c-box {
+    border-color: rgba(0, 106, 255, 0.2); // jemný modrý border v základe
+    background: rgba(0, 106, 255, 0.10);
+    &::before {
+      display: none !important; // Tento riadok kompletne skryje tie žlté šípky
+    }
+  }
+
+  // 2. HOVER STAV (Ten istý element po prejdení myšou)
+  &:hover {
+
+    .c-box {
+      border-color: rgb(0, 106, 255) !important;
+      background: rgba(0, 106, 255, 0.15) !important;
+    }
+  }
+}
+
+
+// --- INSTAGRAM
+.contact-link a[href*="instagram"] {
+  color: rgb(224, 43, 121) !important; 
+
+  .c-box {
+    border-color: rgba(224, 43, 121, 0.20) !important; 
+    background: rgba(224, 43, 121, 0.10) !important;
+    &::before {
+      display: none !important; // Tento riadok kompletne skryje tie žlté šípky
+    }
+  }
+
+  &:hover {
+    .c-box {
+      border-color: rgb(224, 43, 121) !important;
+      background: rgba(224, 43, 121, 0.15) !important;
+    }
+  }
+}
+
+// --- LINKEDIN
+.contact-link a[href*="linkedin"] {
+  color: rgb(43, 161, 224) !important; 
+
+  .c-box {
+    border-color: rgba(43, 161, 224, 0.2) !important; 
+    background: rgba(43, 161, 224, 0.10) !important;
+    &::before {
+      display: none !important; // Tento riadok kompletne skryje tie žlté šípky
+    }
+  }
+
+  &:hover {
+    .c-box {
+      border-color: rgb(43, 161, 224) !important;
+      background: rgba(43, 161, 224, 0.15) !important;
+    }
+  }
+}
+
+// --- EMAIL
+.contact-link a[href*="e.mariodak@gmail.com"] {
+  color: rgb(246, 255, 0) !important; 
+
+  .c-box {
+    border-color: rgba(246, 255, 0, 0.20) !important; 
+    background: rgba(246, 255, 0, 0.10) !important;
+    &::before {
+      display: none !important; // Tento riadok kompletne skryje tie žlté šípky
+    }
+  }
+
+  &:hover {
+    .c-box {
+      border-color: rgb(246, 255, 0) !important;
+      background: rgba(246, 255, 0, 0.15) !important;
+    }
+  }
+}

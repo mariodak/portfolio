@@ -114,41 +114,59 @@ window.addEventListener('DOMContentLoaded', () => {
     const menu = document.getElementById('main-nav-links');
     const navLinks = document.querySelectorAll('.nav-links-container a');
 
-    // 1. loading animation loop
     startCodeLoop();
 
-    // 2. hamburger menu event
     if (toggle && menu) {
         toggle.addEventListener('click', (e) => {
             e.preventDefault();
-            e.stopPropagation(); // Kritické: zabráni zavretiu hneď po otvorení
+            e.stopPropagation();
             toggle.classList.toggle('is-active');
             menu.classList.toggle('is-open');
-            console.log("System: Hamburger state toggled.");
         });
     }
 
-// 3. linking
-navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
+ 
+    function handleRouting() {
+ 
+        let page = window.location.hash.replace('#', '') || 'home';
         
 
-        let fileName = link.getAttribute('data-file');
+        let targetLink = document.querySelector(`.nav-links-container a[data-file="${page}.html"]`) ||
+                         document.querySelector(`.nav-links-container a[data-file="${PAGES_DIR}${page}.html"]`);
         
-        if (!fileName) {
-            fileName = link.getAttribute('data-text').toLowerCase().replace(/\s/g, '') + ".html";
+
+        if (!targetLink) {
+            navLinks.forEach(link => {
+                const txt = link.getAttribute('data-text').toLowerCase().replace(/\s/g, '');
+                if (txt === page) targetLink = link;
+            });
         }
 
-        // Ak už data-file obsahuje celú cestu (assets/pages/...), použijeme ju.
-        // Ak nie, prilepíme pred ňu našu premennú PAGES_DIR.
-        const finalPath = fileName.startsWith('assets') ? fileName : PAGES_DIR + fileName;
+
+        if (!targetLink) targetLink = navLinks[0];
+
+
+        const finalPath = PAGES_DIR + page + '.html';
         
-        navigate(finalPath, link);
+        navigate(finalPath, targetLink);
+    }
+
+navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        
+
+        if (link.getAttribute('target') === '_blank') {
+            return;
+        }
+
+        e.preventDefault(); 
+        
+        let pageName = link.getAttribute('data-file') || link.getAttribute('data-text');
+        pageName = pageName.replace('.html', '').replace('assets/pages/', '').toLowerCase().replace(/\s/g, '');
+        window.location.hash = pageName;
     });
 });
 
-    // 4. close menu outside click
     document.addEventListener('click', (e) => {
         if (menu && menu.classList.contains('is-open')) {
             if (!menu.contains(e.target) && !toggle.contains(e.target)) {
@@ -158,13 +176,7 @@ navLinks.forEach(link => {
         }
     });
 
-    // 5. loading base page
-    const homeLink = document.querySelector('.nav-links-container a.active-link') || navLinks[0];
-    if (homeLink) {
-        let homeFile = homeLink.getAttribute('data-file') || "home.html";
+    window.addEventListener('hashchange', handleRouting);
 
-        const finalHomePath = homeFile.includes('/') ? homeFile : PAGES_DIR + homeFile;
-        
-        navigate(finalHomePath, homeLink);
-    }
+    handleRouting();
 });
