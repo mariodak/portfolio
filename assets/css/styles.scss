@@ -115,8 +115,8 @@ body {
 
 #main-section {
   transition: opacity 0.4s ease-in-out;
-  min-height: 400px;
-  padding: 50px;
+  min-height: 500px;
+  padding: 10px 30px 100px 30px;
   backface-visibility: hidden;
   transform: translateZ(0);
   -webkit-font-smoothing: antialiased;
@@ -401,7 +401,7 @@ section { font-family: Zilla-Regular; }
   letter-spacing: 25px;
   color: $main-color;
   text-align: center;
-  padding: 50px 0;
+  padding: 30px 0;
   text-transform: uppercase;
   overflow: visible;
 
@@ -522,11 +522,11 @@ footer {
 
 // --- INSTAGRAM
 .contact-link a[href*="instagram"] {
-  color: rgb(224, 43, 121) !important; 
+  color: rgb(224, 127, 43) !important; 
 
   .c-box {
-    border-color: rgba(224, 43, 121, 0.20) !important; 
-    background: rgba(224, 43, 121, 0.10) !important;
+    border-color: rgba(224, 127, 43, 0.20) !important; 
+    background: rgba(224, 127, 43, 0.10) !important;
     &::before {
       display: none !important; // Tento riadok kompletne skryje tie žlté šípky
     }
@@ -534,8 +534,8 @@ footer {
 
   &:hover {
     .c-box {
-      border-color: rgb(224, 43, 121) !important;
-      background: rgba(224, 43, 121, 0.15) !important;
+      border-color: rgb(224, 127, 43) !important;
+      background: rgba(224, 127, 43, 0.15) !important;
     }
   }
 }
@@ -561,12 +561,12 @@ footer {
 }
 
 // --- EMAIL
-.contact-link a[href*="e.mariodak@gmail.com"] {
-  color: rgb(246, 255, 0) !important; 
+.contact-link a[href*="github"] {
+  color: rgb(213, 213, 213) !important; 
 
   .c-box {
-    border-color: rgba(246, 255, 0, 0.20) !important; 
-    background: rgba(246, 255, 0, 0.10) !important;
+    border-color: rgba(213, 213, 213, 0.20) !important; 
+    background: rgba(213, 213, 213, 0.10) !important;
     &::before {
       display: none !important; // Tento riadok kompletne skryje tie žlté šípky
     }
@@ -574,8 +574,154 @@ footer {
 
   &:hover {
     .c-box {
-      border-color: rgb(246, 255, 0) !important;
-      background: rgba(246, 255, 0, 0.15) !important;
+      border-color: rgb(213, 213, 213) !important;
+      background: rgba(213, 213, 213, 0.15) !important;
     }
+  }
+}
+
+
+// Projects
+// --- PROJECTS MODAL WINDOW ---
+
+.project-1-img {
+&::before {
+    background-image: url("../img/images.jpeg") !important;
+    }
+}
+
+.project-2-img {
+&::before {
+    background-image: url("../img/background-img.jpg") !important;
+    }
+}
+
+.project-3-img {
+&::before {
+    background-image: url("../img/background-img.jpg") !important;
+    }
+}
+
+.project-bg {
+  position: relative !important; // Uzamkne pozadie vnútri boxu
+  overflow: hidden !important;   // Oseká obrázok podľa zaoblenia/hrán boxu
+  z-index: 1 !important;         
+
+  &::before {
+    content: "" !important;
+    position: absolute !important;
+    
+    // 🔥 TU JE ZMENA: Natvrdo povieme, nech sa roztiahne od nuly po nulu
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    
+    // Tvoja fotka:
+    background-size: cover !important;     // Prispôsobí fotku, aby vyplnila celý priestor
+    background-position: center !important; // Vycentruje ju na stred
+    background-repeat: no-repeat !important;
+    
+    opacity: 0.1 !important; // Tvoja vytúžená jemná priesvitnosť
+    z-index: -1 !important;  // Bezpečne hodí podtext, aby ti nezavadzala pri čítaní
+    
+    transition: opacity 0.3s ease !important; 
+  }
+
+  // Keď prejdeš myšou, pozadie sa jemne rozsvieti – čistý kyberpunk efekt
+  &:hover::before {
+    opacity: 0.3 !important;
+  }
+}
+
+
+.trigger-window {
+  // 🔥 FIX PRE ANIMÁCIU: display: none !important by zabil 1s fade-in. 
+  // Na skrytie používame opacity a pointer-events, display: block držíme stále.
+  display: block !important; 
+  opacity: 0;               
+  pointer-events: none;     
+  
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0) !important; 
+  z-index: 9999999 !important;
+  
+  overflow-y: auto !important; 
+  backdrop-filter: blur(0px); 
+  
+  // 1-sekundový plynulý prechod pre tmu a blur
+  transition: background 0.2s ease, backdrop-filter 0.6s ease, opacity 0.6s ease;
+
+  &.is-active {
+    opacity: 1 !important;
+    pointer-events: all !important;
+    background: rgba(0, 0, 0, 0.85) !important; 
+    backdrop-filter: blur(5px);                  
+  }
+
+  // VNÚTRO OKNA (Tvoj elastický box s projektom)
+  .modal-body {
+    background: #0d0d0d;
+    border: 2px solid $main-color; 
+    box-shadow: 0 0 25px rgba($main-color, 0.15);
+    
+    width: 90% !important;     
+    max-width: 700px !important; 
+    margin: 200px auto 100px auto !important; 
+    
+    height: auto !important;       
+    min-height: 400px;             
+    overflow: visible !important;  
+    padding: 30px 40px;
+    box-sizing: border-box;
+    position: relative; 
+
+    // Hladký nábeh textu a fotiek vnútri boxu za 1s
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    // 🔥 FIX SYNTAXE: Multimédiá sú upratané vnútri .modal-body
+    img, video, iframe {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important; 
+      display: block;
+      margin: 25px 0 !important;
+      border: 1px solid rgba($main-color, 0.3);
+    }
+
+    // 🔥 FIX SYNTAXE: .modal-title je teraz správne usadená vnútri .modal-body hierarchie
+    .modal-title {
+      font-family: Hacked; // ak nefunguje premenná, zmeň na konkrétny font, napr. 'Courier New'
+      font-size: 2rem;
+      color: $main-color;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 35px;
+      letter-spacing: 2px;
+    }
+  }
+
+  // Keď okno získa triedu is-active, vnútro sa plynule rozsvieti
+  &.is-active .modal-body {
+    opacity: 1;
+  }
+}
+
+// Custom scrollbar pre okno projektu
+.trigger-window {
+  &::-webkit-scrollbar { 
+    width: 8px; 
+  }
+  &::-webkit-scrollbar-track { 
+    background: #000; 
+  }
+  &::-webkit-scrollbar-thumb { 
+    background: $main-color; 
+    border-radius: 4px; 
   }
 }

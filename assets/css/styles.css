@@ -150,8 +150,8 @@ body::before {
 
 #main-section {
   transition: opacity 0.4s ease-in-out;
-  min-height: 400px;
-  padding: 50px;
+  min-height: 500px;
+  padding: 10px 30px 100px 30px;
   backface-visibility: hidden;
   transform: translateZ(0);
   -webkit-font-smoothing: antialiased;
@@ -457,7 +457,7 @@ section {
   letter-spacing: 25px;
   color: rgb(246, 255, 0);
   text-align: center;
-  padding: 50px 0;
+  padding: 30px 0;
   text-transform: uppercase;
   overflow: visible;
 }
@@ -577,18 +577,18 @@ footer {
 }
 
 .contact-link a[href*=instagram] {
-  color: rgb(224, 43, 121) !important;
+  color: rgb(224, 127, 43) !important;
 }
 .contact-link a[href*=instagram] .c-box {
-  border-color: rgba(224, 43, 121, 0.2) !important;
-  background: rgba(224, 43, 121, 0.1) !important;
+  border-color: rgba(224, 127, 43, 0.2) !important;
+  background: rgba(224, 127, 43, 0.1) !important;
 }
 .contact-link a[href*=instagram] .c-box::before {
   display: none !important;
 }
 .contact-link a[href*=instagram]:hover .c-box {
-  border-color: rgb(224, 43, 121) !important;
-  background: rgba(224, 43, 121, 0.15) !important;
+  border-color: rgb(224, 127, 43) !important;
+  background: rgba(224, 127, 43, 0.15) !important;
 }
 
 .contact-link a[href*=linkedin] {
@@ -606,17 +606,121 @@ footer {
   background: rgba(43, 161, 224, 0.15) !important;
 }
 
-.contact-link a[href*="e.mariodak@gmail.com"] {
-  color: rgb(246, 255, 0) !important;
+.contact-link a[href*=github] {
+  color: rgb(213, 213, 213) !important;
 }
-.contact-link a[href*="e.mariodak@gmail.com"] .c-box {
-  border-color: rgba(246, 255, 0, 0.2) !important;
-  background: rgba(246, 255, 0, 0.1) !important;
+.contact-link a[href*=github] .c-box {
+  border-color: rgba(213, 213, 213, 0.2) !important;
+  background: rgba(213, 213, 213, 0.1) !important;
 }
-.contact-link a[href*="e.mariodak@gmail.com"] .c-box::before {
+.contact-link a[href*=github] .c-box::before {
   display: none !important;
 }
-.contact-link a[href*="e.mariodak@gmail.com"]:hover .c-box {
-  border-color: rgb(246, 255, 0) !important;
-  background: rgba(246, 255, 0, 0.15) !important;
+.contact-link a[href*=github]:hover .c-box {
+  border-color: rgb(213, 213, 213) !important;
+  background: rgba(213, 213, 213, 0.15) !important;
+}
+
+.project-1-img::before {
+  background-image: url("../img/images.jpeg") !important;
+}
+
+.project-2-img::before {
+  background-image: url("../img/background-img.jpg") !important;
+}
+
+.project-3-img::before {
+  background-image: url("../img/background-img.jpg") !important;
+}
+
+.project-bg {
+  position: relative !important;
+  overflow: hidden !important;
+  z-index: 1 !important;
+}
+.project-bg::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  opacity: 0.1 !important;
+  z-index: -1 !important;
+  transition: opacity 0.3s ease !important;
+}
+.project-bg:hover::before {
+  opacity: 0.3 !important;
+}
+
+.trigger-window {
+  display: block !important;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0) !important;
+  z-index: 9999999 !important;
+  overflow-y: auto !important;
+  backdrop-filter: blur(0px);
+  transition: background 0.2s ease, backdrop-filter 0.6s ease, opacity 0.6s ease;
+}
+.trigger-window.is-active {
+  opacity: 1 !important;
+  pointer-events: all !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(5px);
+}
+.trigger-window .modal-body {
+  background: #0d0d0d;
+  border: 2px solid rgb(246, 255, 0);
+  box-shadow: 0 0 25px rgba(246, 255, 0, 0.15);
+  width: 90% !important;
+  max-width: 700px !important;
+  margin: 200px auto 100px auto !important;
+  height: auto !important;
+  min-height: 400px;
+  overflow: visible !important;
+  padding: 30px 40px;
+  box-sizing: border-box;
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.trigger-window .modal-body img, .trigger-window .modal-body video, .trigger-window .modal-body iframe {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin: 25px 0 !important;
+  border: 1px solid rgba(246, 255, 0, 0.3);
+}
+.trigger-window .modal-body .modal-title {
+  font-family: Hacked;
+  font-size: 2rem;
+  color: rgb(246, 255, 0);
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 35px;
+  letter-spacing: 2px;
+}
+.trigger-window.is-active .modal-body {
+  opacity: 1;
+}
+
+.trigger-window::-webkit-scrollbar {
+  width: 8px;
+}
+.trigger-window::-webkit-scrollbar-track {
+  background: #000;
+}
+.trigger-window::-webkit-scrollbar-thumb {
+  background: rgb(246, 255, 0);
+  border-radius: 4px;
 }/*# sourceMappingURL=styles.css.map */

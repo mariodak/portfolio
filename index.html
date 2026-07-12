@@ -67,38 +67,12 @@
     </div>
 
     <script>
-
-        function navigate(file) {
-            const area = document.getElementById('main-section');
-            if (!area) return;
-
-            area.style.opacity = '0'; //
-
-            setTimeout(() => {
-                fetch(file)
-                    .then(response => {
-                        if (!response.ok) throw new Error('Súbor nenájdený');
-                        return response.text();
-                    })
-                    .then(html => {
-                        area.innerHTML = html;
-                        area.style.opacity = '1';
-
-                    })
-                    .catch(err => {
-                        area.innerHTML = "<h2 style='text-align:center; color:#ffff00;'>SYSTEM_ERROR: DATA_LOST</h2>";
-                        area.style.opacity = '1';
-                        console.error(err);
-                    });
-            }, 200);
-        }
-
+        // Všetko staré odtiaľto vyhadzujeme, lebo sa to bilo s main.js routerom!
         window.addEventListener('DOMContentLoaded', () => {
             const mainContent = document.getElementById('main-content');
-
-            mainContent.classList.add('fade-in-active');
-
-            navigate('home.html');
+            if (mainContent) {
+                mainContent.classList.add('fade-in-active');
+            }
         });
     </script>
 

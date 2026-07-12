@@ -100,6 +100,12 @@ function navigate(file, element) {
             .then(html => {
                 area.innerHTML = html;
                 area.style.opacity = '1';
+
+                // 🔥 TU SPUŠTAME TVOJE PROJEKTOVÉ MODALY!
+                // Ak načítavame súbor projektov, okamžite oživíme klikanie na okná
+                if (file.includes('projects.html')) {
+                    initSimpleModal();
+                }
             })
             .catch(err => {
                 area.innerHTML = "<h2 style='text-align:center; color:#ff0000;'>SYSTEM_ERROR: " + err.message + "</h2>";
@@ -125,16 +131,12 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
- 
     function handleRouting() {
- 
-        let page = window.location.hash.replace('#', '') || 'home';
+        let page = window.location.hash.replace('#', '') || 'aboutme';
         
-
         let targetLink = document.querySelector(`.nav-links-container a[data-file="${page}.html"]`) ||
                          document.querySelector(`.nav-links-container a[data-file="${PAGES_DIR}${page}.html"]`);
         
-
         if (!targetLink) {
             navLinks.forEach(link => {
                 const txt = link.getAttribute('data-text').toLowerCase().replace(/\s/g, '');
@@ -142,30 +144,26 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-
         if (!targetLink) targetLink = navLinks[0];
-
 
         const finalPath = PAGES_DIR + page + '.html';
         
         navigate(finalPath, targetLink);
     }
 
-navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            if (link.getAttribute('target') === '_blank') {
+                return;
+            }
 
-        if (link.getAttribute('target') === '_blank') {
-            return;
-        }
-
-        e.preventDefault(); 
-        
-        let pageName = link.getAttribute('data-file') || link.getAttribute('data-text');
-        pageName = pageName.replace('.html', '').replace('assets/pages/', '').toLowerCase().replace(/\s/g, '');
-        window.location.hash = pageName;
+            e.preventDefault(); 
+            
+            let pageName = link.getAttribute('data-file') || link.getAttribute('data-text');
+            pageName = pageName.replace('.html', '').replace('assets/pages/', '').toLowerCase().replace(/\s/g, '');
+            window.location.hash = pageName;
+        });
     });
-});
 
     document.addEventListener('click', (e) => {
         if (menu && menu.classList.contains('is-open')) {
@@ -180,3 +178,53 @@ navLinks.forEach(link => {
 
     handleRouting();
 });
+
+// --- PROJECTS FUNCTIONS ---
+function initSimpleModal() {
+    const triggers = document.querySelectorAll('.project-trigger');
+    const windows = document.querySelectorAll('.trigger-window');
+
+    // Najprv pre istotu skryjeme všetky okná na ich pôvodnom mieste, nech nestrašia
+    windows.forEach(win => {
+        win.classList.remove('is-active');
+        win.style.display = 'none';
+    });
+
+    triggers.forEach((trigger, index) => {
+        trigger.style.cursor = 'pointer'; 
+        
+        trigger.addEventListener('click', (e) => {
+            e.preventDefault(); 
+            
+            const targetWindow = windows[index];
+            if (targetWindow) {
+                // 🔥 TELEPORT robíme až TU! Až pri kliknutí sa okno presunie do body
+                document.body.appendChild(targetWindow);
+                
+                // Zobrazíme ho
+                targetWindow.style.display = 'flex';
+                
+                setTimeout(() => {
+                    targetWindow.classList.add('is-active');
+                    targetWindow.scrollTop = 0; // Skočíme na vrch článku
+                }, 10);
+            }
+        });
+    });
+
+    // Globálne kliknutie na zatvorenie zostáva rovnaké
+    document.body.addEventListener('click', (e) => {
+        // 1. Klik na krížik (X)
+        
+        // 2. Klik na čierne pozadie (tmu)
+        if (e.target.classList.contains('trigger-window')) {
+    e.target.classList.remove('is-active');
+    document.body.style.overflow = '';
+    
+    // 🔥 OPRAVA PREBLIKÁVANIA: Okno iba schováme
+    setTimeout(() => {
+        e.target.style.display = 'none';
+    }, 300);
+        }
+    });
+}
